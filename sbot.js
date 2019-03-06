@@ -49,6 +49,7 @@ bot.on('message', msg => {
 				});
 			});
 			if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
+			reply(msg, text);
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 	}
