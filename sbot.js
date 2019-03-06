@@ -1,90 +1,68 @@
-
 var TelegramBot = require('node-telegram-bot-api');
 
-var TOKEN = '705453597:AAGSsov5B5DzJMaLL2ixj3VdBjvw0bcEsYw';
+var TOKEN = '731896594:AAGhYDqRvnCUV0MhtOBs0UzbKqO7SRLqCmg';
 
 const options = {
 	webHook: {
 		port: process.env.PORT
 	}
 };
-const url = "https://sheltered-oasis-84309.herokuapp.com/:443";
+const url = "https://upcreabot.herokuapp.com/";
 const bot = new TelegramBot(TOKEN, options);
 
-
 bot.setWebHook(`${url}/bot${TOKEN}`);
+
 const axios = require('axios');
 const querystring = require('querystring');
 const schedule = require('node-schedule');
 
-const menu = {
-	reply_markup: {
-		resize_keyboard: true,
-		one_time_keyboard: false,
-		keyboard: [
-			['Герой'],
-			['Квесты']
-		],
-	},
+let texts = {
+	'-1001227448699s': 'Приветствую тебя, меня зовут UpCreaBot, тебя приняли в ряды апсайтовцев! Добро пожаловать в наше уютное местечко😄',
+	'-320137475s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой! Буду рад фидбеку)'
 };
-const quests = {
-	reply_markup: {
-		resize_keyboard: true,
-		one_time_keyboard: false,
-		keyboard: [
-			['Лес'],
-			['Назад']
-		],
-	},
-};
-bot.onText(/^\/start/, msg => {
-	axios.post('http://sturgeon.kl.com.ua/cwb/reg.php', querystring.stringify({ file: msg.from.id }));
-	bot.sendMessage(msg.chat.id, 'Приветствуем!', menu);
+bot.onText(/\/test/, (msg) => {
+	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
+});
+bot.onText(/\/say (.+)/, (msg) => {
+	if(msg.from.username=='wladislaw353'){
+		bot.deleteMessage(msg.chat.id, msg.message_id);
+		if (msg.reply_to_message != undefined) bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {reply_to_message_id: msg.reply_to_message.message_id, parse_mode:"HTML"});
+		else bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {parse_mode:"HTML"});
+	}
+});
+bot.onText(/\/tsay_(.+)/, (msg) => {
+	if(msg.from.username=='wladislaw353'){
+		bot.deleteMessage(msg.chat.id, msg.message_id);
+		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
+	}
 });
 bot.on('message', msg => {
-	if (msg.text == 'Назад' || msg.text == 'Герой') {
-		hero(msg);
-	}
-	if (msg.text == 'Лес') {
-		quest(1, msg, 'Ты вернулся домой.\n');
-		bot.sendMessage(msg.chat.id, 'Ты пошел в лес\nВернешься через 7 минут', menu);
-	}
-	if (msg.text == 'Квесты') {
-		bot.sendMessage(msg.chat.id, 'Лес - 1 минутa', quests);
+	if (msg.text != undefined){ 
+		if (msg.text.toLowerCase().indexOf('@all') != -1){
+			let text = '';
+			axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
+				users.data.split('#').forEach( (user) => {
+					if (user.length > 1){
+						text += ' ' + user;
+					}
+				});
+			});
+			if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
+		}
+		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 	}
 });
-function hero(msg) {
-	axios.get('http://sturgeon.kl.com.ua/cwb/' + msg.from.id + 'r.txt')
-		.then(amount => {
-			bot.sendMessage(msg.chat.id, 'Герой ' + msg.from.username + ':\nОпыт: ' + amount.data.split('#')[0] + ':\nУровень: ' + amount.data.split('#')[1], menu);
-		})
-}
-function quest(time, msg, text) {
+bot.on('new_chat_members', (user) => {
+	if (user.new_chat_participant.username == undefined) user.new_chat_participant.username = user.new_chat_participant.first_name;
+	if (user.new_chat_participant.username != 'eltransbot') bot.sendMessage(user.chat.id, texts[user.chat.id + 's']);
+	else bot.sendMessage(user.chat.id, 'Приветсвую вас, я только что получил новый пакет модификаций, теперь я просто всемогущ🔥\nИ я снова с вами😊');
+	axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: user.chat.id, value: '#' +  user.new_chat_participant.username}));
+});
+function onTime(time, msg, text) {
 	new schedule.scheduleJob({ start: new Date(Date.now() + Number(time) * 1000 * 60), end: new Date(new Date(Date.now() + Number(time) * 1000 * 60 + 1000)), rule: '*/1 * * * * *' }, function () {
-		bot.sendMessage(msg.chat.id, text + 'Получено: *\n' + rnd(100, msg) + ' опыта*.', { parse_mode: "Markdown" }, menu);
-		console.log(res);
-		if (res.split('#')[2] == 'n') bot.sendMessage(msg.chat.id, text + 'Новый уровень!', { parse_mode: "Markdown" }, menu);
+		bot.sendMessage(msg.chat.id, text, { parse_mode: "HTML" });
 	});
 }
-function rnd(min, max, msg) {
-	if (msg == undefined) {
-		msg = max;
-		max = min;
-		min = 1;
-	}
-	res = Math.floor(min + Math.random() * (max + 1 - min));
-	axios.get('http://sturgeon.kl.com.ua/cwb/' + msg.from.id + 'r.txt')
-		.then(amount => {
-			if (Number(amount.data.split('#')[0]) < 50) res += '#1';
-			if (Number(amount.data.split('#')[0]) > 50 && Numebr(amount.data.split('#')[0]) < 100) res += '#2';
-			if (Number(amount.data.split('#')[0]) > 100 && Numebr(amount.data.split('#')[0]) < 200) res += '#3';
-			if (Number(amount.data.split('#')[0]) > 200 && Numebr(amount.data.split('#')[0]) < 300) res += '#4';
-			if (Number(amount.data.split('#')[0]) > 300 && Numebr(amount.data.split('#')[0]) < 400) res += '#4';
-			if (Number(amount.data.split('#')[0]) > 400 && Numebr(amount.data.split('#')[0]) < 500) res += '#4';
-			if (Number(amount.data.split('#')[1]) != Numebr(res.split('#')[1])) res += '#n';
-			console.log(amount.data.split('#')[0]);
-			axios.post('http://sturgeon.kl.com.ua/cwb/saver.php', querystring.stringify({ file: msg.from.id, value: Number(amount.data.split('#')[0]) + Number(res.split('#')[0]) + '#' + Number(res.split('#')[1]) }));
-			return res;
-		});
+function reply(msg, text){
+	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
-
