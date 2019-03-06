@@ -44,6 +44,7 @@ bot.on('message', msg => {
 				users.data.split('#').forEach( (user) => {
 					if (user.length > 1){
 						text += ' ' + user;
+						console.log(user);
 					}
 				});
 			});
