@@ -43,20 +43,20 @@ bot.on('message', msg => {
 			axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
 				users.data.split('#').forEach( (user) => {
 					if (user.length > 1){
-						text += ' ' + user;
+						text += user + ',';
 						console.log(user);
 					}
 				});
+				if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
+				reply(msg, text);
 			});
-			if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
-			reply(msg, text);
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 	}
 });
 bot.on('new_chat_members', (user) => {
 	if (user.new_chat_participant.username == undefined) user.new_chat_participant.username = user.new_chat_participant.first_name;
-	if (user.new_chat_participant.username != 'eltransbot') bot.sendMessage(user.chat.id, texts[user.chat.id + 's']);
+	if (user.new_chat_participant.username != 'UpCreaBot') bot.sendMessage(user.chat.id, texts[user.chat.id + 's']);
 	else bot.sendMessage(user.chat.id, 'Приветсвую вас, я только что получил новый пакет модификаций, теперь я просто всемогущ🔥\nИ я снова с вами😊');
 	axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: user.chat.id, value: '#' +  user.new_chat_participant.username}));
 });
