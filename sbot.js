@@ -48,6 +48,7 @@ bot.on('message', msg => {
 					}
 				});
 				if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
+				else text += '\nПризываю вас играть в мафию!🌇';
 				reply(msg, text);
 			});
 		}
