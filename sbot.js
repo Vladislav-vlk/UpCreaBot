@@ -19,7 +19,13 @@ const schedule = require('node-schedule');
 let texts = {
 	'-1001227448699s': 'Приветствую тебя, меня зовут UpCreaBot, тебя приняли в ряды апсайтовцев! Добро пожаловать в наше уютное местечко😄',
 	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)'
-};
+};	
+new schedule.scheduleJob('00 6 * * *', () => {
+	getWeather(-1001227448699);
+});	
+new schedule.scheduleJob('46 20 * * *', () => {
+	getWeather(-1001227448699);
+});
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
@@ -72,25 +78,7 @@ bot.on('message', msg => {
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 		if (msg.text.toLowerCase().indexOf('время') != -1) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-		if (msg.text.toLowerCase().indexOf('погода') != -1) {
-			axios.get(`https://www.google.com.ua/search?source=hp&ei=BFOBXNqvNobKrgTa_KmQBQ&q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&btnK=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA+%D0%B2+Google&oq=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4&gs_l=psy-ab.3.0.35i39j0i131j0l3j0i20i263j0l4.4085.5429..6534...1.0..1.299.1451.7j3j2......0....1..gws-wiz.....0..0i131i20i263j0i67.m3CJ5QUGkq8`).then((weather) => {
-				console.log(weather.data);
-				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
-				let cdegree = (fdegree - 32) * 5/9;
-				let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
-				let sm = '';
-				if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
-				if(weather.data.indexOf('rain.png') != -1) sm = '🌧';
-				if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
-				if(weather.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
-				if(weather.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
-				if(weather.data.indexOf('snow_light.png') != -1) sm = '❄️';
-				if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
-				if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
-				if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
-				reply(msg, 'Odessa: ' + cdegree + ' °C\n' + sm + ' ' + state);
-			});
-		}
+		if (msg.text.toLowerCase().indexOf('погода') != -1) getWeather(msg.chat.id);
 	}
 });
 bot.on('new_chat_members', (user) => {
@@ -107,4 +95,23 @@ function onTime(time, msg, text) {
 }
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
+}
+function getWeather(id){
+	axios.get(`https://www.google.com.ua/search?source=hp&ei=BFOBXNqvNobKrgTa_KmQBQ&q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&btnK=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA+%D0%B2+Google&oq=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4&gs_l=psy-ab.3.0.35i39j0i131j0l3j0i20i263j0l4.4085.5429..6534...1.0..1.299.1451.7j3j2......0....1..gws-wiz.....0..0i131i20i263j0i67.m3CJ5QUGkq8`).then((weather) => {
+		console.log(weather.data);
+		let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
+		let cdegree = (fdegree - 32) * 5/9;
+		let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
+		let sm = '';
+		if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
+		if(weather.data.indexOf('rain.png') != -1) sm = '🌧';
+		if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
+		if(weather.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
+		if(weather.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
+		if(weather.data.indexOf('snow_light.png') != -1) sm = '❄️';
+		if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
+		if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
+		if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
+		reply({chat: { id: id }}, 'Odessa: ' + cdegree + ' °C\n' + sm + ' ' + state);
+	});
 }
