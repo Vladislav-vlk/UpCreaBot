@@ -77,7 +77,18 @@ bot.on('message', msg => {
 				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 				let cdegree = (fdegree - 32) * 5/9;
 				let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
-				reply(msg, 'Odessa: ' + cdegree + ' °C\n' + state);
+				let sm = '';
+				if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
+				if(weather.data.indexOf('rain.png') != -1) sm = '🌧';
+				if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
+				if(weather.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
+				if(weather.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
+				if(weather.data.indexOf('snow_light.png') != -1) sm = '❄️';
+				if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
+				if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
+				if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
+				if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
+				reply(msg, 'Odessa: ' + cdegree + ' °C\n' + sm + ' ' + state);
 			});
 		}
 	}
