@@ -23,9 +23,6 @@ let texts = {
 new schedule.scheduleJob('00 6 * * *', () => {
 	getWeather(-1001227448699);
 });	
-new schedule.scheduleJob('46 20 * * *', () => {
-	getWeather(-1001227448699);
-});
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
@@ -40,7 +37,7 @@ bot.onText(/^\/delBottom/, (msg) => {
 					for(i = msg.reply_to_message.message_id; i < msg.message_id; i++){
 						bot.deleteMessage(msg.chat.id, i);
 					}
-					ans(msg, '✅ Удалено ' + i + ' сообщений');
+					bot.deleteMessage(msg.chat.id, msg.message_id);
 				}
 			});
 		}
@@ -112,6 +109,7 @@ function getWeather(id){
 		if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
 		if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
 		if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
+		if(weather.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
 		reply({chat: { id: id }}, 'Odessa: ' + cdegree + ' °C\n' + sm + ' ' + state);
 	});
 }
