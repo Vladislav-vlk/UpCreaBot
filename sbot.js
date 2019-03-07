@@ -75,7 +75,8 @@ bot.on('message', msg => {
 				console.log(weather.data);
 				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 				let cdegree = (fdegree - 32) * 5/9;
-				reply(msg, 'В Одессе сейчас ' + cdegree + ' °C | ' + fdegree + ' °F');
+				let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
+				reply(msg, 'Odessa: ' + cdegree + ' °C\n' + state);
 			});
 		}
 	}
