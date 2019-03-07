@@ -53,12 +53,6 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
 	}
 });
-bot.onText(/\/tsay_(.+)/, (msg) => {
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
-		bot.deleteMessage(msg.chat.id, msg.message_id);
-		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
-	}
-});
 bot.on('message', msg => {
 	if (msg.text != undefined){ 
 		if (msg.text.toLowerCase().indexOf('@all') != -1){
@@ -73,6 +67,7 @@ bot.on('message', msg => {
 				if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
 				else text += '\nПризываю вас играть в мафию!🌇';
 				reply(msg, text);
+				bot.deleteMessage(msg.chat.id, msg.message_id);
 			});
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
