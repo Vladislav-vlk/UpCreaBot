@@ -72,7 +72,7 @@ bot.on('message', msg => {
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 		if (msg.text.toLowerCase().indexOf('время') != -1) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
 		if (msg.text.toLowerCase().indexOf('погода') != -1) {
-			axios.get(`https://www.google.ca/search?ei=x0SBXJGxNdKprgT--JOIBA&q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&oq=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&gs_l=psy-ab.3..0i131i67j0l9.23311.23311..23516...0.0..0.80.80.1......0....1..gws-wiz.......0i71.OElVmzz0rsY`).then((weather) => {
+			axios.get(`https://www.google.com.ua/search?source=hp&ei=BFOBXNqvNobKrgTa_KmQBQ&q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&btnK=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA+%D0%B2+Google&oq=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4&gs_l=psy-ab.3.0.35i39j0i131j0l3j0i20i263j0l4.4085.5429..6534...1.0..1.299.1451.7j3j2......0....1..gws-wiz.....0..0i131i20i263j0i67.m3CJ5QUGkq8`).then((weather) => {
 				console.log(weather.data);
 				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 				let cdegree = (fdegree - 32) * 5/9;
