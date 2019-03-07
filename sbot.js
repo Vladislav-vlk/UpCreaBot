@@ -71,9 +71,9 @@ bot.on('message', msg => {
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 		if (msg.text.toLowerCase().indexOf('погода') != -1) {
-			axios.get('https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5').then((weather) => {
+			axios.get('https://www.google.ca/search?ei=x0SBXJGxNdKprgT--JOIBA&q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&oq=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5&gs_l=psy-ab.3..0i131i67j0l9.23311.23311..23516...0.0..0.80.80.1......0....1..gws-wiz.......0i71.OElVmzz0rsY').then((weather) => {
 				console.log(weather.data);
-				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('°F</span>')[0]);
+				let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 				let cdegree = (fdegree - 32) * 5/9;
 				reply(msg, 'В Одессе сейчас ' + cdegree + ' °C | ' + fdegree + ' °F');
 			});
