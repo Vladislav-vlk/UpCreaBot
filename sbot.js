@@ -70,8 +70,9 @@ bot.on('message', msg => {
 			});
 		}
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
-		if (msg.text.toLowerCase().indexOf('какая') != -1 && msg.text.toLowerCase().indexOf('погода') != -1) {
+		if (msg.text.toLowerCase().indexOf('погода') != -1) {
 			axios.get('https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5').then((weather) => {
+				console.log(weather.data);
 				let degree = weather.data.split('<span class="wob_t" id="wob_tm" style="display:inline">')[1].split('</span>')[0];
 				reply(msg, 'В Одессе сейчас ' + degree + 'градусов');
 			});
