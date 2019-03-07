@@ -18,7 +18,7 @@ const schedule = require('node-schedule');
 
 let texts = {
 	'-1001227448699s': 'Приветствую тебя, меня зовут UpCreaBot, тебя приняли в ряды апсайтовцев! Добро пожаловать в наше уютное местечко😄',
-	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой! Буду рад фидбеку)'
+	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)'
 };
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
@@ -45,6 +45,12 @@ bot.onText(/\/say (.+)/, (msg) => {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		if (msg.reply_to_message != undefined) bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {reply_to_message_id: msg.reply_to_message.message_id, parse_mode:"HTML"});
 		else bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {parse_mode:"HTML"});
+	}
+});
+bot.onText(/\/tsay_(.+)/, (msg) => {
+	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
+		bot.deleteMessage(msg.chat.id, msg.message_id);
+		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
 	}
 });
 bot.onText(/\/tsay_(.+)/, (msg) => {
@@ -86,7 +92,6 @@ bot.on('message', msg => {
 				if(weather.data.indexOf('snow_light.png') != -1) sm = '❄️';
 				if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
 				if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
-				if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
 				if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
 				reply(msg, 'Odessa: ' + cdegree + ' °C\n' + sm + ' ' + state);
 			});
