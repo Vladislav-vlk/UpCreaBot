@@ -17,23 +17,7 @@ const querystring = require('querystring');
 const schedule = require('node-schedule');
 
 let musicid = [
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817',
-	'https://song.link/ua/i/1437199817'
+	'CQADAgADGgYAAmt6EEiD1vgnMju39wI'
 ];
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
@@ -151,7 +135,7 @@ function getWeather(id, before, after){
 	});
 }
 function music(msg){
-	let randMusic = Math.floor(0 + Math.random() * 18);
+	let randMusic = Math.floor(0 + Math.random() * musicid.length);
 	console.log(musicid[randMusic]);
 	bot.sendVoice(msg.chat.id, musicid[randMusic], {caption: 'Вот, послушай'});
 }
