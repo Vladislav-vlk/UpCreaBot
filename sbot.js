@@ -24,11 +24,11 @@ let texts = {
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699);
+		getWeather(-1001227448699, 'Доброе утро))', 'Всем хорошего настроения✨');
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699);
+		getWeather(-1001227448699, 'Доброе утро))', 'Всем хорошего настроения✨');
 	});
 }
 bot.onText(/^\/test/, (msg) => {
@@ -101,7 +101,7 @@ function onTime(time, msg, text) {
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
-function getWeather(id){
+function getWeather(id, before, after){
 	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
 	.then((weatherG) => {
 		console.log(weatherG.data);
@@ -109,17 +109,19 @@ function getWeather(id){
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
 		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
 		let sm = '';
-		if(weatherG.data.indexOf('cloudy.png') != -1) sm = '☁️';
-		if(weatherG.data.indexOf('rain.png') != -1) sm = '🌧';
-		if(weatherG.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
-		if(weatherG.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
-		if(weatherG.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
-		if(weatherG.data.indexOf('snow_light.png') != -1) sm = '❄️';
-		if(weatherG.data.indexOf('snow.png') != -1) sm = '❄️';
-		if(weatherG.data.indexOf('sunny.png') != -1) sm = '☀️';
-		if(weatherG.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
-		if(weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
-		reply({chat: { id: id }}, sm + ' ' + cdegree + ' °C');
+		if (weatherG.data.indexOf('cloudy.png') != -1) sm = '☁️';
+		if (weatherG.data.indexOf('rain.png') != -1) sm = '🌧';
+		if (weatherG.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
+		if (weatherG.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
+		if (weatherG.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
+		if (weatherG.data.indexOf('snow_light.png') != -1) sm = '❄️';
+		if (weatherG.data.indexOf('snow.png') != -1) sm = '❄️';
+		if (weatherG.data.indexOf('sunny.png') != -1) sm = '☀️';
+		if (weatherG.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
+		if (weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
+		if (before == undefined) before = '';
+		if (after == undefined) after = '';
+		reply({chat: { id: id }}, before + '\nСегодня ' + sm + ' ' + cdegree + ' °C\n' + after);
 		weather = sm + ' ' + cdegree + ' °C';
 	})
 	.catch((err) => {
