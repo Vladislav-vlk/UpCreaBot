@@ -120,19 +120,17 @@ bot.on('new_chat_members', (user) => {
 });
 bot.on('callback_query', (call) => {
 	console.log(call.data);
-	if(call.data == 'music') music(call);
-	if(call.data == 'time') reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-	if(call.data == 'weather') getWeather(msg.chat.id, 'Сейчас: ', '');
-	if(call.data == 'instr') instructions(call);
+	if(call.data == 'music') music(call.message);
+	if(call.data == 'time') reply(call.message, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
+	if(call.data == 'weather') getWeather(call.message.chat.id, 'Сейчас: ', '');
+	if(call.data == 'instr') instructions(call.message);
 });
 function functions(msg){
-	bot.sendMessage(msg.chat.id, 'А что ты хочешь, что я умел? Я научусь 😊 ', {
+	bot.sendMessage(msg.chat.id, 'А что ты хочешь, чтоб я умел? Я научусь 😊 ', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'}],
-				[{text: 'Погода ⛅️', callback_data : 'weather'}],
-				[{text: 'Время 🕒', callback_data : 'time'}],
-				[{text: 'Музыка 🎶', callback_data : 'music'}]
+				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'},{text: 'Музыка 🎶', callback_data : 'music'}],
+				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Время 🕒', callback_data : 'time'}]
 			]
 		}
 	});
