@@ -101,7 +101,7 @@ function getWeather(id){
 	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`).then((weather) => {
 		console.log(weather.data);
 		let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
-		let cdegree = (fdegree - 32) * 5/9;
+		let cdegree = Math.floor(fdegree - 32) * 5/9);
 		//let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
 		let sm = '';
 		if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
