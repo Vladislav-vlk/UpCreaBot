@@ -27,7 +27,7 @@ if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Da
 	new schedule.scheduleJob('00 7 * * *', () => {
 		getWeather(-1001227448699, 'Доброе утро))', 'Всем хорошего настроения✨');
 	});
-	new schedule.scheduleJob('15 7 * * *', () => {
+	new schedule.scheduleJob('18 7 * * *', () => {
 		getWeather(-1001227448699, 'Доброе утро))', 'Всем хорошего настроения✨');
 	});
 }else{
