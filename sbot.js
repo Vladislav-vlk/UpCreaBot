@@ -208,7 +208,7 @@ function getWeather(id, before, after){
 		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
 		let wind = Number(weatherG.data.split('at <span class="wob_t" style="display:inline">')[1].split(' mph')[0]);
-		if(wind == 0) wind = 'Ветра нет ✨;
+		if(wind == 0) wind = 'Ветра нет ✨';
 		if(wind >=1 && wind <= 10) wind = 'Легкий ветерок 🌬';
 		if(wind >=10 && wind <= 20) wind = 'Ветренно 💨';
 		if(wind > 20) wind = 'Сильный ветер 🌪';
