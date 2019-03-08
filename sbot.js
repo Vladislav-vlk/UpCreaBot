@@ -16,6 +16,26 @@ const axios = require('axios');
 const querystring = require('querystring');
 const schedule = require('node-schedule');
 
+let musicid = [
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgAD-gEAAm5EEEj6opzOEyHTQAI',
+	'CQADAgADJQYAAmt6EEglcJZDsUGviwI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
+	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI'
+];
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
 	'-1001227448699s': 'Приветствую тебя, меня зовут UpCreaBot, тебя приняли в ряды апсайтовцев! Добро пожаловать в наше уютное местечко😄',
@@ -85,6 +105,7 @@ bot.on('message', msg => {
 		if (msg.text.toLowerCase().indexOf('привет') != -1) reply(msg, 'Привет)');
 		if (msg.text.toLowerCase().indexOf('время') != -1) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
 		if (msg.text.toLowerCase().indexOf('погода') != -1) getWeather(msg.chat.id);
+		if (msg.text.toLowerCase().indexOf('скинь музыку') != -1) music(msg);
 	}
 });
 bot.on('new_chat_members', (user) => {
@@ -129,4 +150,8 @@ function getWeather(id, before, after){
 		reply({chat: { id: id }}, weather);
 		console.log(err);
 	});
+}
+function music(msg){
+	let randMusic = Math.floor(0 + Math.random() * 18);
+	bot.sendVoice(msg.chat.id, musicid[randMusic], 'Вот, послушай');
 }
