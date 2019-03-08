@@ -17,24 +17,23 @@ const querystring = require('querystring');
 const schedule = require('node-schedule');
 
 let musicid = [
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgAD-gEAAm5EEEj6opzOEyHTQAI',
-	'CQADAgADJQYAAmt6EEglcJZDsUGviwI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI',
-	'CQADAgADJgYAAmt6EEiILvRF2G-1NQI'
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817',
+	'https://song.link/ua/i/1437199817'
 ];
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
