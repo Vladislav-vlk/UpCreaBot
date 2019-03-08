@@ -18,7 +18,21 @@ const schedule = require('node-schedule');
 
 let lastMusic = -1;
 let musicid = [
-	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI'
+	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI',
+	'CQADAgADGAYAAmt6EEjacEpxcjthQAI',
+	'CQADAgAD-AEAAm5EEEgZ7XD6nv5gPAI',
+	'CQADAgADGgYAAmt6EEjhTRxBEIfySwI',
+	'CQADAgAD-QEAAm5EEEjxENFM1B7LSQI',
+	'CQADAgADHwYAAmt6EEiuahRall4ncQI',
+	'CQADAgADIAYAAmt6EEhRI7sPI7r2vwI',
+	'CQADAgADHAYAAmt6EEiAD7yx8bmDAwI',
+	'CQADAgADHQYAAmt6EEi-Vy6anpSp2wI',
+	'CQADAgADIwYAAmt6EEgShUm7F9oK3QI',
+	'CQADAgADGwYAAmt6EEi_zgk4SbYRAAEC',
+	'CQADAgADIQYAAmt6EEgI97HmooRzpwI',
+	'CQADAgADJAYAAmt6EEjz5xLH1X62KgI',
+	'CQADAgADIgYAAmt6EEgKGyLe_RTRWgI',
+	'CQADAgADHgYAAmt6EEhehilr0ozxKgI'
 ];
 let al = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('');
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
@@ -65,13 +79,13 @@ bot.onText(/\/say (.+)/, (msg) => {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		if (msg.reply_to_message != undefined) bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {reply_to_message_id: msg.reply_to_message.message_id, parse_mode:"HTML"});
 		else bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {parse_mode:"HTML"});
-	}
+	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 bot.onText(/\/tsay_(.+)/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
-	}
+	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 bot.on('message', msg => {
 	if (msg.text != undefined){ 
@@ -121,16 +135,15 @@ bot.on('new_chat_members', (user) => {
 bot.on('callback_query', (call) => {
 	console.log(call.data);
 	if(call.data == 'music') music(call.message);
-	if(call.data == 'time') reply(call.message, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-	if(call.data == 'weather') getWeather(call.message.chat.id, 'Сейчас: ', '');
+	if(call.data == 'weather') getWeather(call.message.chat.id, '@' + call.from.username + ', сейчас: ', '');
 	if(call.data == 'instr') instructions(call.message);
 });
 function functions(msg){
 	bot.sendMessage(msg.chat.id, 'А что ты хочешь, чтоб я умел? Я научусь 😊 ', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'},{text: 'Музыка 🎶', callback_data : 'music'}],
-				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Время 🕒', callback_data : 'time'}]
+				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'}],
+				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Музыка 🎶', callback_data : 'music'}]
 			]
 		}
 	});
@@ -139,10 +152,10 @@ function instructions(msg){
 	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'SEO', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'}],
-				[{text: 'Sales manager', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
-				[{text: 'Front-end', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'}],
-				[{text: 'Back-end', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
+				[{text: 'SEO', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'},
+				{text: 'Sales manager', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
+				[{text: 'Front-end', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'},
+				{text: 'Back-end', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
 			]
 		},
 		parse_mode: "Markdown"
