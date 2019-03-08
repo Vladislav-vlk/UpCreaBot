@@ -39,7 +39,7 @@ bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
 bot.onText(/^\/audio/, (msg) => {
-	reply(msg, 'ID: ' + msg.audio.file_id);
+	reply(msg, 'ID: ' + msg.reply_to_message.audio.file_id);
 });
 bot.onText(/^\/delBottom/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
