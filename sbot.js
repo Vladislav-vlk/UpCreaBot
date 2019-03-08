@@ -233,8 +233,8 @@ function getWeather(id, before, after){
 }
 function music(msg){
 	let randMusic = Math.floor(0 + Math.random() * musicid.length);
-	while(randMusic == lastMusic) randMusic = Math.floor(0 + Math.random() * musicid.length);
-	lastMusic = randMusic;
+	//while(randMusic == lastMusic) randMusic = Math.floor(0 + Math.random() * musicid.length);
+	//lastMusic = randMusic;
 	console.log(musicid[randMusic]);
 	bot.sendAudio(msg.chat.id, musicid[randMusic], {
 		reply_markup: {
