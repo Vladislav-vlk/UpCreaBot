@@ -137,5 +137,5 @@ function getWeather(id, before, after){
 function music(msg){
 	let randMusic = Math.floor(0 + Math.random() * musicid.length);
 	console.log(musicid[randMusic]);
-	bot.sendVoice(msg.chat.id, musicid[randMusic], {caption: 'Вот, послушай'});
+	bot.sendAudio(msg.chat.id, musicid[randMusic], {caption: 'Вот, послушай'});
 }
