@@ -22,12 +22,15 @@ let texts = {
 	'-369468468s': 'Привет в тестовом чате!'
 };	
 let weather = '';
-new schedule.scheduleJob('00 6 * * *', () => {
-	getWeather(-1001227448699);
-});		
-new schedule.scheduleJob('00 6 * * *', () => {
-	getWeather(-369468468);
-});
+if (new Date().getDay() == 6 || new Date().getDay == 0) {
+	new schedule.scheduleJob('00 7 * * *', () => {
+		getWeather(-1001227448699);
+	});
+}else{
+	new schedule.scheduleJob('00 6 * * *', () => {
+		getWeather(-1001227448699);
+	});
+}
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
