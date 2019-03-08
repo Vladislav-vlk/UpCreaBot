@@ -17,7 +17,7 @@ const querystring = require('querystring');
 const schedule = require('node-schedule');
 
 let musicid = [
-	'CQADAgADGgYAAmt6EEiD1vgnMju39wI'
+	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI'
 ];
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
@@ -38,8 +38,8 @@ if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Da
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
-bot.onText(/^\/audio/, (msg) => {
-	reply(msg, 'ID: ' + msg.reply_to_message.audio.file_id);
+bot.on('audio', (msg) => {
+	reply(msg, 'ID: ' + msg.audio.file_id);
 });
 bot.onText(/^\/delBottom/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
