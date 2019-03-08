@@ -109,16 +109,16 @@ function getWeather(id){
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
 		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
 		let sm = '';
-		if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
-		if(weather.data.indexOf('rain.png') != -1) sm = '🌧';
-		if(weather.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
-		if(weather.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
-		if(weather.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
-		if(weather.data.indexOf('snow_light.png') != -1) sm = '❄️';
-		if(weather.data.indexOf('snow.png') != -1) sm = '❄️';
-		if(weather.data.indexOf('sunny.png') != -1) sm = '☀️';
-		if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
-		if(weather.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
+		if(weatherG.data.indexOf('cloudy.png') != -1) sm = '☁️';
+		if(weatherG.data.indexOf('rain.png') != -1) sm = '🌧';
+		if(weatherG.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
+		if(weatherG.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
+		if(weatherG.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
+		if(weatherG.data.indexOf('snow_light.png') != -1) sm = '❄️';
+		if(weatherG.data.indexOf('snow.png') != -1) sm = '❄️';
+		if(weatherG.data.indexOf('sunny.png') != -1) sm = '☀️';
+		if(weatherG.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
+		if(weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
 		reply({chat: { id: id }}, sm + ' ' + cdegree + ' °C');
 		weather = sm + ' ' + cdegree + ' °C';
 	})
