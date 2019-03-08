@@ -21,6 +21,7 @@ let texts = {
 	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)',
 	'-369468468s': 'Привет в тестовом чате!'
 };	
+let weather = '';
 new schedule.scheduleJob('00 6 * * *', () => {
 	getWeather(-1001227448699);
 });		
@@ -98,11 +99,12 @@ function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
 function getWeather(id){
-	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`).then((weather) => {
-		console.log(weather.data);
-		let fdegree = Number(weather.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
+	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
+	.then((weatherG) => {
+		console.log(weatherG.data);
+		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
-		//let state = weather.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
+		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
 		let sm = '';
 		if(weather.data.indexOf('cloudy.png') != -1) sm = '☁️';
 		if(weather.data.indexOf('rain.png') != -1) sm = '🌧';
@@ -115,5 +117,9 @@ function getWeather(id){
 		if(weather.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
 		if(weather.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
 		reply({chat: { id: id }}, sm + ' ' + cdegree + ' °C');
+		weather = sm + ' ' + cdegree + ' °C';
+	})
+	.catch((err) => {
+		reply({chat: { id: id }}, weather);
 	});
 }
