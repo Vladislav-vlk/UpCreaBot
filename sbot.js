@@ -16,6 +16,7 @@ const axios = require('axios');
 const querystring = require('querystring');
 const schedule = require('node-schedule');
 
+let lastMusic = -1;
 let musicid = [
 	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI'
 ];
@@ -101,6 +102,9 @@ bot.on('new_chat_members', (user) => {
 	else bot.sendMessage(user.chat.id, 'Приветсвую вас, я только что получил новый пакет модификаций, теперь я просто всемогущ🔥\nИ я снова с вами😊');
 	axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: user.chat.id, value: '#' +  user.new_chat_participant.username}));
 });
+bot.on('callback_query', (call) => {
+	if(call.data == 'music') music(call);
+});
 function onTime(time, msg, text) {
 	new schedule.scheduleJob({ start: new Date(Date.now() + Number(time) * 1000 * 60), end: new Date(new Date(Date.now() + Number(time) * 1000 * 60 + 1000)), rule: '*/1 * * * * *' }, function () {
 		bot.sendMessage(msg.chat.id, text, { parse_mode: "HTML" });
@@ -137,6 +141,14 @@ function getWeather(id, before, after){
 }
 function music(msg){
 	let randMusic = Math.floor(0 + Math.random() * musicid.length);
+	while(randMusic == lastMusic) randMusic = Math.floor(0 + Math.random() * musicid.length);
+	lastMusic = randMusic;
 	console.log(musicid[randMusic]);
-	bot.sendAudio(msg.chat.id, musicid[randMusic], {caption: 'Вот, послушай'});
+	bot.sendAudio(msg.chat.id, musicid[randMusic], {
+		reply_markup: {
+			inline_keyboard: [
+				[{text: 'Ещё 🎶', callback_data : 'music'}]
+			]
+		}
+	});
 }
