@@ -116,6 +116,7 @@ function reply(msg, text){
 function getWeather(id, before, after){
 	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
 	.then((weatherG) => {
+		console.log(weatherG.date);
 		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
 		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
@@ -132,7 +133,7 @@ function getWeather(id, before, after){
 		if (weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
 		if (before == undefined) before = '';
 		if (after == undefined) after = '';
-		reply({chat: { id: id }}, before + '\nСегодня ' + sm + ' ' + cdegree + ' °C\n' + after);
+		reply({chat: { id: id }}, before + '\nСегодня ' + sm + ' ' + cdegree + ' °C\n'  + '\n' + after);
 		weather = sm + ' ' + cdegree + ' °C';
 	})
 	.catch((err) => {
