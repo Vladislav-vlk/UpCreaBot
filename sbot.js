@@ -124,5 +124,6 @@ function getWeather(id){
 	})
 	.catch((err) => {
 		reply({chat: { id: id }}, weather);
+		console.log(err);
 	});
 }
