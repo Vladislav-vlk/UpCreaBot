@@ -105,7 +105,7 @@ bot.on('message', msg => {
 		if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
 		if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
 		if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Сейчас: ', '');
-		if (ex(msg.text,'кинь музыку') || ex(msg.text,'кинь песню)) music(msg);
+		if (ex(msg.text,'кинь музыку') || ex(msg.text,'кинь песню')) music(msg);
 		if (ex(msg.text,'раскодируй')) encode(msg);
 		if (ex(msg.text,'закодируй')) code(msg, 1);
 		if (ex(msg.text,'рабочая инструкция')) instructions(msg);
