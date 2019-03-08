@@ -38,6 +38,9 @@ if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Da
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
+bot.onText(/^\/audio/, (msg) => {
+	reply(msg, 'ID: ' + msg.audio.file_id);
+});
 bot.onText(/^\/delBottom/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
 		if (msg.reply_to_message == undefined) ans(msg, '❌ Не указана точка начала');
@@ -109,7 +112,6 @@ function reply(msg, text){
 function getWeather(id, before, after){
 	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
 	.then((weatherG) => {
-		console.log(weatherG.data);
 		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
 		let cdegree = Math.floor((fdegree - 32) * 5/9);
 		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
@@ -131,7 +133,6 @@ function getWeather(id, before, after){
 	})
 	.catch((err) => {
 		reply({chat: { id: id }}, weather);
-		console.log(err);
 	});
 }
 function music(msg){
