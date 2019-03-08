@@ -24,7 +24,7 @@ let texts = {
 new schedule.scheduleJob('00 6 * * *', () => {
 	getWeather(-1001227448699);
 });		
-new schedule.scheduleJob('20 6 * * *', () => {
+new schedule.scheduleJob('00 6 * * *', () => {
 	getWeather(-369468468);
 });
 bot.onText(/^\/test/, (msg) => {
