@@ -76,7 +76,8 @@ bot.onText(/^\/delBottom/, (msg) => {
 	}
 });
 bot.onText(/\/add (.+)/, (msg) => {
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: user.chat.id, value: '#' +  msg.text.split(' ')[1]}));
+	bot.deleteMessage(msg.chat.id, msg.message_id);
+	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: msg.chat.id, value: '#' +  msg.text.split(' ')[1]}));
 });
 bot.onText(/\/say (.+)/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
