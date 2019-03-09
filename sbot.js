@@ -114,7 +114,7 @@ bot.on('message', msg => {
 	if (msg.text != undefined){ 
 		let a  = 'x';
 		restrict.forEach((word) => {
-			if(a == 'x' && msg.text.toLowerCase().indexOf(word[0]) != -1){
+			if(a == 'x' && msg.text.toLowerCase().indexOf(word) != -1){
 				bot.deleteMessage(msg.chat.id, msg.message_id);
 				a = 1;
 			}
@@ -122,10 +122,11 @@ bot.on('message', msg => {
 		if(a == 'x'){
 			let s  = 0;
 			triggers.forEach((trigger) => {
-				if(ex(msg.text, trigger[0])) s += rand(trigger[1]) + ',';
+				console.log(trigger[0]);
+				if(msg.text.toLowerCase().indexOf(trigger[0]) != -1) s += rand(trigger[1]) + ',';
 			});
 			console.log(s);
-			if(s != 0) {
+			if(s == 0) {
 				if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
 					let text = '';
 					axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
