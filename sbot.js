@@ -34,7 +34,7 @@ let musicid = [
 	'CQADAgADIgYAAmt6EEgKGyLe_RTRWgI',
 	'CQADAgADHgYAAmt6EEhehilr0ozxKgI'
 ];
-let restrict = 'диктатур, диктатор, лгбт, ориентаци, гетеро, террор, путин, сталин, поребрик, прокопски'.split(', ');
+let restrict = 'диктатур, диктатор, лгбт, ориентаци, гетеро, террор, путин, сталин, поребрик, прокопски, prokopian, dictatorship'.split(', ');
 let al = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('');
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
