@@ -91,7 +91,7 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 bot.on('message', msg => {
 	let a  = 0;
 	restrict.forEach((word) => {
-		if(a == 1 && ex(word, msg.text.toLowerCase())) bot.deleteMessage(msg.chat.id, msg.message_id);
+		if(a == 1 && ex(msg.text.toLowerCase(), word)) bot.deleteMessage(msg.chat.id, msg.message_id);
 	});
 	if (msg.text != undefined){ 
 		if (msg.text.toLowerCase().indexOf('@all') != -1){
