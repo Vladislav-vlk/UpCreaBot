@@ -120,9 +120,11 @@ bot.on('message', msg => {
 			}
 		});
 		if(a == 0){
+			let s  = 0;
 			triggers.forEach((trigger) => {
-				if(ex(msg.text, trigger[0])) reply(msg, rand(trigger[1]));
+				if(ex(msg.text, trigger[0])) s += rand(trigger[1]) + ',';
 			});
+			if(s != 0) 
 			if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
 				let text = '';
 				axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
@@ -138,8 +140,9 @@ bot.on('message', msg => {
 					bot.deleteMessage(msg.chat.id, msg.message_id);
 				});
 			}
-			if (ex(msg.text,'дур')) reply(msg, 'Сам такой 😠');
-			if (ex(msg.text,'туп')) reply(msg, 'Сам такой 😠');
+			if (ex(msg.text,'ты дур')) reply(msg, 'Сам такой 😠');
+			if (ex(msg.text,'ты туп')) reply(msg, 'Сам такой 😠');
+			if (ex(msg.text,'что такое')) reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.split('что такое')[1].split(' ').join('_') + '/">На, почитай</a>');
 			if (ex(msg.text,'пока')) reply(msg, 'Я буду скучать 🥺');
 			if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
 			if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']));
