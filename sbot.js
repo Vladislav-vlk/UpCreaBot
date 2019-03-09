@@ -34,6 +34,7 @@ let musicid = [
 	'CQADAgADIgYAAmt6EEgKGyLe_RTRWgI',
 	'CQADAgADHgYAAmt6EEhehilr0ozxKgI'
 ];
+let restrict = 'диктатур, диктатор, лгбт, ориентаци, гетеро, террор, путин, сталин, поребрик, прокопски'.split(', ');
 let al = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('');
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
@@ -88,6 +89,10 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 bot.on('message', msg => {
+	let a  = 0;
+	restrict.forEach((word) => {
+		if(a == 1 && ex(word, msg.text.toLowerCase())) bot.deleteMessage(msg.chat.id, msg.message_id);
+	});
 	if (msg.text != undefined){ 
 		if (msg.text.toLowerCase().indexOf('@all') != -1){
 			let text = '';
@@ -106,6 +111,20 @@ bot.on('message', msg => {
 		}
 		if (ex(msg.text,'привет')) reply(msg, 'Привет)');
 		if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
+		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, '😊 Ты тоже))');
+		if (ex(msg.text,'спасибо')) reply(msg, 'всегда пожалуйста');
+		if (ex(msg.text,'слава') && ex(msg.text,'украине')) reply(msg, 'Героям слава 🇺🇦');
+		if (ex(msg.text,'думаешь') && ex(msg.text,'мир')) reply(msg,
+			`Наш мир - Земля 🌏 — третья от Солнца планета Солнечной системы.
+			Расстояние от Солнца до Земли в среднем составляет 149,6 млн км. Это расстояние называется в астрономии 1 астрономической единицей и используется в качестве основной единицы определения расстояний между небесными телами Солнечной системы. ☄️
+			Земля представляет собой сплюснутый сфероид, т.е. неправильную сферу, немного сжатую с полюсов.  Максимальная длина окружности Земли по экватору — 40 075,02 км, по меридиану 40 007,86 км.
+
+			Мир это прекрасное место 🌺, которое уничтожают люди 🥀
+			Относитесь к природе лучше и она в долгу не останется 🏵`
+	        );
+		if (ex(msg.text,'8') && ex(msg.text,'марта')) reply(msg,
+			`Международный женский день обязан своим появлением "маршу пустых кастрюль", который состоялся 8 марта 1857 года в Нью-Йорке. Работницы текстильных фабрик тогда вышли на уличные протесты, требуя десятичасовой рабочий день (было - шестнадцать часов), достойную зарплату и право голоса на выборах. Во время акции они били в упомянутые кастрюли. Позже участниц движения стали называли суфражистками (от suffrage - голосование, избирательное право).`
+	        );
 		if (ex(msg.text,'любимый') && ex(msg.text,'цвет')) reply(msg, 'Хммм.. Синий, а у тебя?');
 		if (ex(msg.text,'любишь') && ex(msg.text,'людях')) reply(msg, 'Ум и отзывчивость');
 		if (ex(msg.text,'тебя') && ex(msg.text,'создал')) reply(msg, 'Пусть это будет тайна 😋 ');
@@ -119,10 +138,11 @@ bot.on('message', msg => {
 		if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
 		if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
 		if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Сейчас: ', '');
+		if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Сейчас: ', '');
 		if (ex(msg.text,'кинь музыку') || ex(msg.text,'кинь песню')) music(msg);
 		if (ex(msg.text,'раскодируй')) encode(msg);
 		if (ex(msg.text,'закодируй')) code(msg, 1);
-		if (ex(msg.text,'рабочая инструкция')) instructions(msg);
+		if (ex(msg.text,'рабоч') && ex(msg.text,'инструкци')) instructions(msg);
 	}
 });
 bot.on('new_chat_members', (user) => {
@@ -135,7 +155,7 @@ bot.on('new_chat_members', (user) => {
 bot.on('callback_query', (call) => {
 	console.log(call.data);
 	if(call.data == 'music') music(call.message);
-	if(call.data == 'weather') getWeather(call.message.chat.id, '@' + call.from.username + ', сейчас: ', '');
+	if(call.data == 'weather') getWeather(call.message.chat.id, 'Сейчас: ', '');
 	if(call.data == 'instr') instructions(call.message);
 });
 function functions(msg){
@@ -148,21 +168,22 @@ function functions(msg){
 		}
 	});
 }
+function rans(){}
 function instructions(msg){	
 	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'SEO', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'},
-				{text: 'Sales manager', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
-				[{text: 'Front-end', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'},
-				{text: 'Back-end', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
+				[{text: 'SEO 🧝‍♂', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'},
+				{text: 'Sales manager 🦸‍♀', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
+				[{text: 'Front-end 👨‍💻', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'},
+				{text: 'Back-end 🧙‍♂', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
 			]
 		},
 		parse_mode: "Markdown"
 	});
 }
 function ex(str, substring){
-	if (str.toLowerCase().indexOf(substring.toLowerCase()) != -1) return true;
+	if (str.toLowerCase().indexOf(substring) != -1) return true;
 	return false;
 }
 function encode(msg){
@@ -252,7 +273,7 @@ function music(msg){
 	bot.sendAudio(msg.chat.id, musicid[randMusic], {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'Ещё 🎶', callback_data : 'music'}]
+				[{text: 'Ещё песню 🎶', callback_data : 'music'}]
 			]
 		}
 	});
