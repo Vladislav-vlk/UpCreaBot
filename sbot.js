@@ -101,7 +101,7 @@ bot.on('message', msg => {
 				a = 1;
 			}
 		});
-		if (msg.text.toLowerCase().indexOf('@all') != -1){
+		if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
 			let text = '';
 			axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
 				users.data.split('#').forEach( (user) => {
@@ -120,7 +120,7 @@ bot.on('message', msg => {
 		if (ex(msg.text,'дур')) reply(msg, 'Сам такой 😠');
 		if (ex(msg.text,'туп')) reply(msg, 'Сам такой 😠');
 		if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
-		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']);
+		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']));
 		if (ex(msg.text,'спасибо')) reply(msg, rand(['Всегда пожалуйста👌', 'Буду рад помочь 😊']));
 		if (ex(msg.text,'слава') && ex(msg.text,'украине')) reply(msg, 'Героям слава 🇺🇦');
 		if (ex(msg.text,'думаешь') && ex(msg.text,'мир')) reply(msg,
