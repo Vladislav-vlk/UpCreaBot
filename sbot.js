@@ -124,6 +124,7 @@ bot.on('message', msg => {
 			triggers.forEach((trigger) => {
 				if(ex(msg.text, trigger[0])) s += rand(trigger[1]) + ',';
 			});
+			console.log(s);
 			if(s != 0) {
 				if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
 					let text = '';
