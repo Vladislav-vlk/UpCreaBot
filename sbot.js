@@ -45,11 +45,11 @@ let texts = {
 let weather = 'Давай чуть позже, я занят';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨');
+		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨');
+		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
 	});
 }
 bot.onText(/^\/test/, (msg) => {
@@ -243,7 +243,7 @@ function onTime(time, msg, text) {
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
-function getWeather(id, before, after){
+function getWeather(id, before, after, t){
 	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
 	.then((weatherG) => {
 		console.log(weatherG.data);
@@ -268,6 +268,7 @@ function getWeather(id, before, after){
 		if (weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
 		if (before == undefined) before = '';
 		if (after == undefined) after = '';
+		if(ex(sm, '🌧') || ex(sm, '🌧') || ex(sm, '🌨') || ex(sm, '⚡️')) after += '\nНе забудь взять зонтик ☔️';
 		reply({chat: { id: id }}, before + sm + ' ' + cdegree + ' °C\n' + wind + after);
 		weather = before + sm + ' ' + cdegree + ' °C\n' + wind + after;
 	})
