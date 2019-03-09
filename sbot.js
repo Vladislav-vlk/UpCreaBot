@@ -42,7 +42,7 @@ let texts = {
 	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)',
 	'-369468468s': 'Привет в тестовом чате!'
 };	
-let weather = '';
+let weather = 'Давай чуть позже, я занят';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
 		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨');
@@ -116,12 +116,12 @@ bot.on('message', msg => {
 				bot.deleteMessage(msg.chat.id, msg.message_id);
 			});
 		}
-		if (ex(msg.text,'привет')) reply(msg, 'Привет)');
+		if (ex(msg.text,'привет')) reply(msg, rand(['Привет)', '👋', 'Давно не виделись😄']));
 		if (ex(msg.text,'дур')) reply(msg, 'Сам такой 😠');
 		if (ex(msg.text,'туп')) reply(msg, 'Сам такой 😠');
 		if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
-		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, '😊 Ты тоже))');
-		if (ex(msg.text,'спасибо')) reply(msg, 'Всегда пожалуйста👌');
+		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']);
+		if (ex(msg.text,'спасибо')) reply(msg, rand(['Всегда пожалуйста👌', 'Буду рад помочь 😊']));
 		if (ex(msg.text,'слава') && ex(msg.text,'украине')) reply(msg, 'Героям слава 🇺🇦');
 		if (ex(msg.text,'думаешь') && ex(msg.text,'мир')) reply(msg,
 			`Наш мир - Земля 🌏 — третья от Солнца планета Солнечной системы.
@@ -147,7 +147,7 @@ bot.on('message', msg => {
 		if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
 		if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Сейчас: ', '');
 		if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Сейчас: ', '');
-		if (ex(msg.text,'кинь музыку') || ex(msg.text,'кинь песню')) music(msg);
+		if (ex(msg.text,'музык') || ex(msg.text,'песн')) music(msg);
 		if (ex(msg.text,'раскодируй')) encode(msg);
 		if (ex(msg.text,'закодируй')) code(msg, 1);
 		if (ex(msg.text,'рабоч') && ex(msg.text,'инструкци')) instructions(msg);
@@ -176,7 +176,9 @@ function functions(msg){
 		}
 	});
 }
-function rans(){}
+function rand(phrases){
+	return(phrases[Math.floor(0 + Math.random() * (phrases.length + 1))]);
+}
 function instructions(msg){	
 	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
 		reply_markup: {
