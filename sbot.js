@@ -177,7 +177,7 @@ function functions(msg){
 	});
 }
 function rand(phrases){
-	return(phrases[Math.floor(0 + Math.random() * (phrases.length + 1))]);
+	return(phrases[Math.floor(0 + Math.random() * (phrases.length))]);
 }
 function instructions(msg){	
 	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
