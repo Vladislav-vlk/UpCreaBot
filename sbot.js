@@ -117,6 +117,8 @@ bot.on('message', msg => {
 			});
 		}
 		if (ex(msg.text,'привет')) reply(msg, 'Привет)');
+		if (ex(msg.text,'дур')) reply(msg, 'Сам такой 😠');
+		if (ex(msg.text,'туп')) reply(msg, 'Сам такой 😠');
 		if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
 		if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, '😊 Ты тоже))');
 		if (ex(msg.text,'спасибо')) reply(msg, 'Всегда пожалуйста👌');
