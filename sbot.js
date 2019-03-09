@@ -178,7 +178,7 @@ bot.on('message', msg => {
 				if (ex(msg.text,'раскодируй')) encode(msg);
 				if (ex(msg.text,'закодируй')) code(msg, 1);
 				if (ex(msg.text,'рабоч') && ex(msg.text,'инструкци')) instructions(msg);
-			}else reply(msg, s.slice(0,-1));
+			}else reply(msg, s.slice(1,-1));
 		}
 	}
 });
