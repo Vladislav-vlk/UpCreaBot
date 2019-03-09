@@ -92,14 +92,14 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 bot.on('message', msg => {
-	let a  = 0;
-	restrict.forEach((word) => {
-		if(a == 0 && msg.text.toLowerCase().indexOf(word) != -1){
-			bot.deleteMessage(msg.chat.id, msg.message_id);
-			a = 1;
-		}
-	});
-	if (msg.text != undefined){ 
+	if (msg.text != undefined){ 	
+		let a  = 0;
+		restrict.forEach((word) => {
+			if(a == 0 && msg.text.toLowerCase().indexOf(word) != -1){
+				bot.deleteMessage(msg.chat.id, msg.message_id);
+				a = 1;
+			}
+		});
 		if (msg.text.toLowerCase().indexOf('@all') != -1){
 			let text = '';
 			axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
