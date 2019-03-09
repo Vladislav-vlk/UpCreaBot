@@ -112,14 +112,14 @@ let triggers = [
 ];
 bot.on('message', msg => {
 	if (msg.text != undefined){ 
-		let a  = 0;
+		let a  = 'x';
 		restrict.forEach((word) => {
-			if(a == 0 && msg.text.toLowerCase().indexOf(word) != -1){
+			if(a == 'x' && msg.text.toLowerCase().indexOf(word[0]) != -1){
 				bot.deleteMessage(msg.chat.id, msg.message_id);
 				a = 1;
 			}
 		});
-		if(a == 0){
+		if(a == 'x'){
 			let s  = 0;
 			triggers.forEach((trigger) => {
 				if(ex(msg.text, trigger[0])) s += rand(trigger[1]) + ',';
