@@ -159,7 +159,7 @@ bot.on('message', msg => {
 					if(a) res = eval(msg.text.toLowerCase().split('сколько будет ')[1]);
 					reply(msg, res);
 				}
-				if (ex(msg.text,'что такое ')) reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
+				if (ex(msg.text,'что такое ')) reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
 				if (ex(msg.text,'пока')) reply(msg, 'Я буду скучать 🥺');
 				if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
 				if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']));
