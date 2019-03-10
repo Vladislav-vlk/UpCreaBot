@@ -160,8 +160,12 @@ bot.on('message', msg => {
 					reply(msg, res);
 				}
 				if (ex(msg.text,'что такое ')){
-					axios.get(encodeURI('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_'))).then((wiki) => {
-						wiki.data.indexOf('В Википедии нет статьи с таким названием') != -1 ? reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>') : reply(msg, 'Не знаю🤷‍♂️');
+					axios.get(encodeURI('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_')))
+					.then((wiki) => {
+						reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
+					})
+					.catch((err) => {
+						reply(msg, 'Не знаю🤷‍♂️');
 					});
 				}
 				if (ex(msg.text,'пока')) reply(msg, 'Я буду скучать 🥺');
