@@ -150,7 +150,7 @@ bot.on('message', msg => {
 				if (ex(msg.text,'ты дур')) reply(msg, 'Сам такой 😠');
 				if (ex(msg.text,'ты туп')) reply(msg, 'Сам такой 😠');
 				if (ex(msg.text,'сколько будет ')){
-					let success = '0123456789+/*-.,'.split('');
+					let success = '0123456789+/*-.,()'.split('');
 					a = true;
 					msg.text.split('сколько будет ')[1].split('').forEach((letter) => {
 						if(success.indexOf(letter) == -1) a = false;
