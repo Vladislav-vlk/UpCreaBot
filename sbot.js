@@ -103,17 +103,17 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 let triggers = [
-	['спать',['🤤', '🤤']],
-	['спокойной ночи',['Споки😴']],
-	['поздравляю',['🤩', '🥳']],
-	['с днем рождения',['🎉🥳🤗']],
-	['бух',['🥴🤪']],
-	['😂😂',['🤣']],
-	['кто молодец',['Я😋']],
-	['снег',['☃️']],
-	['бот',['🤖']],
-	['мда',['🤦‍♂']],
-	['привет',['Привет)', '👋', 'Давно не виделись😄']]
+	[['спать'],['🤤', '🤤']],
+	[['спокойной ночи'],['Споки😴']],
+	[['поздравляю'],['🤩', '🥳']],
+	[['с днем рождения'],['🎉🥳🤗']],
+	[['бух'],['🥴🤪']],
+	[['😂😂'],['🤣']],
+	[['кто молодец'],['Я😋']],
+	[['снег'],['☃️']],
+	[['бот'],['🤖']],
+	[['мда'],['🤦‍♂']],
+	[['привет'],['Привет)', '👋', 'Давно не виделись😄']]
 ];
 bot.on('message', msg => {
 	if (msg.text != undefined){ 
@@ -250,8 +250,16 @@ function instructions(msg){
 	});
 }
 function ex(str, substring){
-	if (str.toLowerCase().indexOf(substring) != -1) return true;
-	return false;
+	let a = false;
+	if (Array.isArray(substring)){
+		a = true;
+		substring.forEach((sub) => {
+			if (str.toLowerCase().indexOf(sub) == -1) a = false;
+		});
+	}else{
+		if (str.toLowerCase().indexOf(substring) != -1) a = true;
+	}
+	return a;
 }
 function encode(msg){
 	if(msg.reply_to_message != undefined){
@@ -330,7 +338,7 @@ function getWeather(id, before, after, t){
 		weather = before + sm + ' ' + cdegree + ' °C\n' + wind + after;
 	})
 	.catch((err) => {
-		reply({chat: { id: id }}, before + after);
+		reply({chat: { id: id }}, 'Ошибка ' + err + ', не могу узнать погоду :с');
 	});
 }
 function music(msg){
