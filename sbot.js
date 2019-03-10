@@ -52,7 +52,7 @@ if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Da
 		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
 	});
 }
-new schedule.scheduleJob('59 8 * * *', () => {
+new schedule.scheduleJob('01 9 * * *', () => {
 		getWeather(-369468468, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
 	});
 bot.onText(/^\/test/, (msg) => {
