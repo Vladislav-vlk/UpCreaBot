@@ -152,11 +152,11 @@ bot.on('message', msg => {
 				if (ex(msg.text,'сколько будет ')){
 					let success = '0123456789+/*-.,()'.split('');
 					a = true;
-					msg.text.split('сколько будет ')[1].split('').forEach((letter) => {
+					msg.text.toLowerCase().split('сколько будет ')[1].split('').forEach((letter) => {
 						if(success.indexOf(letter) == -1) a = false;
 					});
 					let res = 'Не знаю🤷‍♂️';
-					if(a) res = eval(msg.text.split('сколько будет ')[1]);
+					if(a) res = eval(msg.text.toLowerCase().split('сколько будет ')[1]);
 					reply(msg, res);
 				}
 				if (ex(msg.text,'что такое ')) reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
