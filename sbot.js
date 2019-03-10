@@ -160,7 +160,7 @@ bot.on('message', msg => {
 					reply(msg, res);
 				}
 				if (ex(msg.text,'что такое ')){
-					axios.get('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '').then((wiki) => {
+					axios.get(encodeURI('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_'))).then((wiki) => {
 						wiki.data.indexOf('В Википедии нет статьи с таким названием') != -1 ? reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>') : reply(msg, 'Не знаю🤷‍♂️');
 					});
 				}
