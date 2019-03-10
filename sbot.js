@@ -42,7 +42,7 @@ let texts = {
 	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)',
 	'-369468468s': 'Привет в тестовом чате!'
 };	
-let weather = 'Давай чуть позже, я занят';
+let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
 		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨', 1);
@@ -309,7 +309,7 @@ function getWeather(id, before, after, t){
 		weather = before + sm + ' ' + cdegree + ' °C\n' + wind + after;
 	})
 	.catch((err) => {
-		reply({chat: { id: id }}, weather);
+		reply({chat: { id: id }}, before + after);
 	});
 }
 function music(msg){
