@@ -309,36 +309,16 @@ function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
 function getWeather(id, before, after, t){
-	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
+	axios.get('https://www.meteoprog.ua/ua/weather/Odesa/')
 	.then((weatherG) => {
 		console.log(weatherG.data);
-		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
-		let cdegree = Math.floor((fdegree - 32) * 5/9);
-		let wind = Number(weatherG.data.split('at <span class="wob_t" style="display:inline">')[1].split(' mph')[0]);
-		if(wind == 0) wind = 'Ветра нет ✨';
-		if(wind >=1 && wind <= 10) wind = 'Легкий ветерок 🌬';
-		if(wind >=10 && wind <= 20) wind = 'Ветренно 💨';
-		if(wind > 20) wind = 'Сильный ветер 🌪';
-		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
-		let sm = '';
-		if (weatherG.data.indexOf('cloudy.png') != -1) sm = '☁️';
-		if (weatherG.data.indexOf('rain.png') != -1) sm = '🌧';
-		if (weatherG.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
-		if (weatherG.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
-		if (weatherG.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
-		if (weatherG.data.indexOf('snow_light.png') != -1) sm = '❄️';
-		if (weatherG.data.indexOf('snow.png') != -1) sm = '❄️';
-		if (weatherG.data.indexOf('sunny.png') != -1) sm = '☀️';
-		if (weatherG.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
-		if (weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
-		if (before == undefined) before = '';
-		if (after == undefined) after = '';
-		if(ex(sm, '🌧') || ex(sm, '🌧') || ex(sm, '🌨') || ex(sm, '⚡️')) after += '\nНе забудь взять зонтик ☔️';
-		reply({chat: { id: id }}, before + sm + ' ' + cdegree + ' °C\n' + wind + after);
-		weather = before + sm + ' ' + cdegree + ' °C\n' + wind + after;
+		let state = weatherG.data.split('<!-- begin block/inner/avatar -->')[1].split('Погода Одеса: ')[1].split('" alt="')[0];
+	    	let em = '';
+		if (state.indexOf('хмарно') != -1) em = '☁️';
+		reply({chat: { id: id }}, before + em + state + after);
 	})
 	.catch((err) => {
-		reply({chat: { id: id }}, 'Ошибка ' + err + ', не могу узнать погоду :с');
+		reply({chat: { id: id }}, err + ', не могу узнать погоду :с');
 	});
 }
 function music(msg){
