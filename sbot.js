@@ -195,8 +195,8 @@ bot.on('message', msg => {
 				if (ex(msg.text,'шаурма') && ex(msg.text,'с') && ex(msg.text,'или')) reply(msg, 'С бараниной ))');
 				if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
 				if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-				if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Сейчас: ', '');
-				if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Сейчас: ', '');
+				if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Зараз: ', '');
+				if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Зараз: ', '');
 				if (ex(msg.text,'музык') || ex(msg.text,'песн')) music(msg);
 				if (ex(msg.text,'раскодируй')) encode(msg);
 				if (ex(msg.text,'закодируй')) code(msg, 1);
@@ -215,7 +215,7 @@ bot.on('new_chat_members', (user) => {
 bot.on('callback_query', (call) => {
 	console.log(call.data);
 	if(call.data == 'music') music(call.message);
-	if(call.data == 'weather') getWeather(call.message.chat.id, 'Сейчас: ', '');
+	if(call.data == 'weather') getWeather(call.message.chat.id, 'Зараз: ', '');
 	if(call.data == 'instr') instructions(call.message);
 });
 function functions(msg){
