@@ -1,339 +1,239 @@
-var TelegramBot = require('node-telegram-bot-api');
-
-var TOKEN = '731896594:AAGhYDqRvnCUV0MhtOBs0UzbKqO7SRLqCmg';
-
+const TelegramBot = require('node-telegram-bot-api');
+var TOKEN = '671152584:AAGKvTqwm9nYQcgt29BQvF0ZxxlQJ-f6fOQ';
 const options = {
-	webHook: {
-		port: process.env.PORT
-	}
+    webHook: {
+        port: process.env.PORT
+    }
 };
-const url = "https://upcreabot.herokuapp.com/";
+const url = "https://upstud.herokuapp.com//:443";
 const bot = new TelegramBot(TOKEN, options);
-
 bot.setWebHook(`${url}/bot${TOKEN}`);
 
-const axios = require('axios');
-const querystring = require('querystring');
-const schedule = require('node-schedule');
+//functions
+function ansBtn(msg, text, btn) {
+    async function send() {
+        let x = await bot.sendMessage(msg.chat.id, text, btn);
+        return x;
+    }
+    send();
+}
+function ans(msg, text) {
+    async function send() {
+        let x = await bot.sendMessage(msg.chat.id, text, { reply_to_message: msg.message_id, parse_mode: "HTML" });
+        return x;
+    }
+    send();
+}
+function exist(str, substr) {
+    if (str.toLowerCase().indexOf(substr.toLowerCase()) != -1) return true;
+    return false;
+}
+function alert(msg, sendText) {
+    bot.answerCallbackQuery(msg.id, text = sendText, show_alert = true);
+}
+function getLink(id, name) {
+    return `<a href="tg://user?id=${id}"> ${(name + '').replace('<', '&lt;').replace('>', '&gt;')}</a>`;
+}
+//end functions
 
-let lastMusic = -1;
-let musicid = [
-	'CQADAgADGQYAAmt6EEiKhl7Aojp0nQI',
-	'CQADAgADGAYAAmt6EEjacEpxcjthQAI',
-	'CQADAgAD-AEAAm5EEEgZ7XD6nv5gPAI',
-	'CQADAgADGgYAAmt6EEjhTRxBEIfySwI',
-	'CQADAgAD-QEAAm5EEEjxENFM1B7LSQI',
-	'CQADAgADHwYAAmt6EEiuahRall4ncQI',
-	'CQADAgADIAYAAmt6EEhRI7sPI7r2vwI',
-	'CQADAgADHAYAAmt6EEiAD7yx8bmDAwI',
-	'CQADAgADHQYAAmt6EEi-Vy6anpSp2wI',
-	'CQADAgADIwYAAmt6EEgShUm7F9oK3QI',
-	'CQADAgADGwYAAmt6EEi_zgk4SbYRAAEC',
-	'CQADAgADIQYAAmt6EEgI97HmooRzpwI',
-	'CQADAgADJAYAAmt6EEjz5xLH1X62KgI',
-	'CQADAgADIgYAAmt6EEgKGyLe_RTRWgI',
-	'CQADAgADHgYAAmt6EEhehilr0ozxKgI'
-];
-let restrict = 'диктатур, диктатор, лгбт, ориентаци, гетеро, террор, путин, сталин, поребрик, прокопски, prokopian, dictatorship'.split(', ');
-let al = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('');
-let weDates = ['8.3', '31.12', '1.1', '2.1', '3.1', '7.1', '14.1', '14.10', '24.8', '29.6', '1.4'];
+//data
+let menu = {
+    reply_markup: {
+        inline_keyboard: [
+            [{ text: 'SEO', callback_data: 'seo' }, { text: 'Маркетолог', callback_data: 'marketolog' }, { text: 'SMM', callback_data: 'smm' }],
+            [{ text: 'Android', callback_data: 'android' }, { text: 'Front-end', callback_data: 'front' }, { text: 'Back-end', callback_data: 'back' }],
+            [{ text: 'Дизайнер', callback_data: 'designer' }, { text: 'Копирайтер', callback_data: 'copywriter' }, { text: 'PR-менеджер', callback_data: 'pr' }],
+            [{ text: 'HR-менеджер', callback_data: 'hr' }, { text: 'Project', callback_data: 'pm' }, { text: 'IOS', callback_data: 'ios' }]
+        ]
+    }
+}
+let users = {}
 let texts = {
-	'-1001227448699s': 'Приветствую тебя, меня зовут UpCreaBot, тебя приняли в ряды апсайтовцев! Добро пожаловать в наше уютное местечко😄',
-	'-1001190080849s': 'Добро пожаловать в наш круг, мафиози, теперь ты во власти ботов😈. Наслаждайся игрой!)',
-	'-369468468s': 'Привет в тестовом чате!'
-};	
-let weather = '';
-if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
-	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
-	});
-}else{
-	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
-	});
+    seo: "описание seo",
+    designer: "Стажировка Веб-Дизайнера направлена на командное практическое обучение в самостоятельном освоении новых навыков. Помимо освоения разработки сайтов  на сетке bootstrap, идет поверхностное изучение Брендинга и Фирменного стиля, так как многие проекты требуют разработки под ключ.",
+    copywriter: "3",
+    android: "4",
+    front: "Практика по направлению Front-End ориентирована на командное практическое обучение в самостоятельном освоении новых навыков.\nПомимо освоения Front-end направления: html5, css3, flexbox, js, анимация и т.д., идет поверхностное изучение PHP, так как многие проекты требуют навыков Full Stack, например таких как: натяжение верстки на CMS, вывод функционала, формы оправки, установка модулей и т.д.\nПрактическое обучение CMS OpenCart./nПрактика бесплатная, длительность 3 месяца. Теоретическое обучение самостоятельное, практическое обучение с ментором в командной работе.",
+    marketolog: "6",
+    smm: "описание smm",
+    ios: "описание ios",
+    pm: "описание pm",
+    pr: "описание pr",
+    hr: "описание hr",
+    back: "описание back-end"
 }
-new schedule.scheduleJob('01 9 * * *', () => {
-		getWeather(-369468468, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
-	});
-bot.onText(/^\/test/, (msg) => {
-	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
+let admins = {
+    seo: -1001283098154,
+    designer: -1001283098154,
+    copywriter: -1001283098154,
+    android: -1001283098154,
+    front: -1001283098154,
+    marketolog: -1001283098154,
+    smm: -1001283098154,
+    ios: -1001283098154,
+    pm: -1001283098154,
+    pr: -1001283098154,
+    hr: -1001283098154,
+    back: -1001283098154
+}
+let tests = {
+    seo: -1001283098154,
+    designer: -1001283098154,
+    copywriter: -1001283098154,
+    android: -1001283098154,
+    front: -1001283098154,
+    marketolog: -1001283098154,
+    smm: -1001283098154,
+    ios: -1001283098154,
+    pm: -1001283098154,
+    pr: -1001283098154,
+    hr: -1001283098154,
+    back: -1001283098154
+}
+let adminMessages = {
+    // fromId: {
+    //     msg_id: 2341,
+    //     reciever_id: 98871235
+    // }
+}
+let que_ans = [
+    ['длится интернатура;длится курс;длятся курсы;длится практика;длится стажировка', 'Длительность курса для копирайтера, веб-дизайнера и SMM специалиста - 2 месяца + месяц стажировки\nДля SEO специалиста и разработчиков - 3 месяца + месяц стажировки\nДля маркетолога и менеджеров - 4 месяца + 2 месяца стажировки', menu],
+    ['адрес', 'Мы находимся на ул. Большая Арнаутская, 15, вход слева от банка "Пумб". Офис 37а (3 этаж). Для уточнения времени свяжитесь с нашим <a href = "tg://user?id=466910261">менеджером</a>'],
+    ['бесплатно', 'Интернатура полностью бесплатная'],
+    ['Привет', 'Привет! Что бы ты хотел узнать?'],
+    ['направлен', 'Направления:', menu],
+    ['ок;спасибо;пока;до свидания', 'Всего доброго, пиши если захочешь узнать еще что-то'],
+    ['Когда нач;Когда можно нач', 'Начать можно в любое время, но вначале нужно заполнить <a href = "https://up-site.com.ua/pages/anketa/">форму</a> и выполнить тестовое задание'],
+    ['Возраст', 'Чем старше человек, тем сложнее воспринимает новую информацию и переучивается. Так что если тебе уже глубоко за 30, то мы вряд ли будем думать о долгосрочных перспективах совместной работы. Разве только если ты очень молод душой и фонтанируешь креативными идеями'],
+    ['перспектив;трудоустройств', 'Мы заинтересованы в том, чтобы наши лучшие ученики работали с нами'],
+    ['график', 'Практическое обучение 20 часов в неделю (10:00-14:00 или 14:00-18:00)'],
+    ['Как проход', 'Теоретическое обучение самостоятельное. На практике оттачиваются практические навыки. У тебя будет ментор, который подскажет и направит ход мыслей']
+]
+let tests = {
+    seo: ['SEO1', 'SEO2', 'SEO3', 'SEO4', 'SEO5'],
+    designer: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    copywriter: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    android: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    front: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    marketolog: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    smm: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    ios: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    pm: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    pr: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    hr: ['des1', 'des2', 'des3', 'des4', 'des5'],
+    back: ['des1', 'des2', 'des3', 'des4', 'des5']
+}
+//end data
+
+//handlers
+bot.on('message', (msg) => { // any message
+    if (msg.text != undefined && !exist(msg.text, '/') && users[msg.from.id].banned == 0 && msg.chat.id > 0) {
+        if (users[msg.from.id].stage == 'link') {
+            users[msg.from.id].link = msg.text;
+            ans({ chat: { id: -1001283098154 } }, '#HR\nНовый пользователь:\nСсылка: ' + users[msg.from.id].link + '\nСсылка на пользователя: ' + getLink(msg.from.id, msg.from.first_name));
+            ansBtn(msg, 'Пройдите тест: ', { reply_markup: { inline_keyboard: [[{ text: 'Пройти тестирование', callback_data: 'test' + users[msg.from.id].direction }]] } });
+            users[msg.from.id].stage = 'waiting';
+        } else if (users[msg.from.id].stage == 'email') {
+            users[msg.from.id].link = msg.text;
+            ans({ chat: { id: -1001283098154 } }, '#HR\nНовая питухля:\nСсылка в сибирь: ' + users[msg.from.id].link + '\nСама питухля: ' + getLink(msg.from.id, msg.from.first_name));
+            ansBtn(msg, 'Пройдите тест: ', { reply_markup: { inline_keyboard: [[{ text: 'Пройти тестирование', callback_data: 'test' + users[msg.from.id].direction }]] } });
+            users[msg.from.id].stage = 'waiting';
+        } else if (users[msg.from.id].stage != 'testing') {
+            if (users[msg.from.id] != undefined && users[msg.from.id].direction != 'none') {
+                let answer = 'Не понимаю, о чем вы. Попробуйте перефразировать вашу мысль.';
+                let buttons = {};
+                que_ans.forEach((questions) => {
+                    questions[0].split(';').forEach((sent) => {
+                        if (exist(msg.text, sent)) {
+                            answer = questions[1];
+                            questions[2] != undefined ? buttons = questions[2] : buttons = { reply_markup: { inline_keyboard: [] } };
+                        }
+                    });
+                });
+                if (users[msg.from.id].test == 0) buttons.reply_markup.inline_keyboard.push([{ text: 'Пройти тестирование', callback_data: 'test' + users[msg.from.id].direction }]);
+                ansBtn(msg, answer, buttons);
+            } else {
+                ansBtn(msg, 'Какое направление тебя интересует?', menu);
+            }
+        } else {
+            users[msg.from.id].answers[users[msg.from.id].num] = msg.text;
+            users[msg.from.id].num++;
+            if (users[msg.from.id].num != tests[users[msg.from.id].direction].length) {
+                users[msg.from.id].stage = 'testing';
+                ansBtn(msg, tests[users[msg.from.id].direction][users[msg.from.id].num] + '?', { reply_markup: { inline_keyboard: [[{ text: 'Пропустить', callback_data: 'skiptest' + users[msg.from.id].direction }]] } });
+            } else {
+                users[msg.from.id].stage = 'complete';
+                ans(msg, 'Тест пройден, результаты отправлены');
+                ans({ chat: { id: -1001283098154 } }, 'Новыйе результаты:\n' + JSON.stringify(users[msg.from.id].answers));
+            }
+        }
+    }
 });
-bot.onText(/tt/, (msg) => {
-    if (msg.from.id == 270886500) bot.promoteChatMember(msg.chat.id, 270886500,1,1,1,1,1,1,1,1)
+bot.on('callback_query', async (call) => { // when buttons clicked
+    let msg = call.message;
+    if (call.data.includes('invite-')) {
+        ans({ chat: { id: call.data.split('invite-')[1] } }, 'Вы приглашены в UpSite');
+        ans(msg, 'Приглашение отправлено');
+    } else if (call.data.includes('send-')) {
+        ans({ chat: { id: call.data.split('send-')[1] } }, tests[users[call.data.split('send-')[1]].direction]);
+        ans(msg, 'Тестовое задание отправлено');
+    } else {
+        if (texts[call.data] != undefined) { // выбирается специальность
+            if (exist(users[call.from.id].direction, '?') || users[call.from.id].direction == 'none') users[call.from.id].direction = call.data + '?';
+            if (users[call.from.id].stage != 'testing') ansBtn(msg, texts[call.data], { reply_markup: { inline_keyboard: [[{ text: 'Подтвердить', callback_data: 'confirm' + users[call.from.id].direction.replace('?', '') }]] } }); // answer text from que_ans
+            else if (users[call.from.id].stage == 'testing') alert(msg, 'Сначала завершите тест');
+            else alert(msg, 'Вы уже прошли тест');
+        } else {
+            if (exist(call.data, 'skip')) { // пропуск вопроса
+                users[call.from.id].answers[users[call.from.id].num] = 'Пропущен';
+                users[call.from.id].num++;
+            }
+            if (exist(call.data, 'link') && users[call.from.id].stage == 'free') {
+                users[call.from.id].stage = 'link';
+                ans(msg, 'Укажите ссылку');
+            }
+            if (exist(call.data, 'email') && users[call.from.id].stage == 'free') {
+                users[call.from.id].stage = 'email';
+                ans(msg, 'Укажите почту');
+            }
+            if (exist(call.data, 'confirm') && exist(users[call.from.id].direction, '?')) {
+                users[call.from.id].direction = call.data.split('confirm')[1];
+                ansBtn(msg, 'Как вы к нам пришли?: ', { reply_markup: { inline_keyboard: [[{ text: 'По вакансии', callback_data: 'link' }], [{ text: 'Заполнял анкету', callback_data: 'email' }]] } });
+            }
+            if (exist(call.data, 'test')) { // запуск теста
+                if (users[call.from.id].stage == 'complete') alert(msg, 'Вы уже прошли тест'); // тест уже пройден
+                else { // следующий вопрос
+                    if (users[call.from.id].num != tests[call.data.split('test')[1]].length - 1) {
+                        users[call.from.id].stage = 'testing';
+                        ansBtn(msg, tests[call.data.split('test')[1]][users[call.from.id].num] + '?', { reply_markup: { inline_keyboard: [[{ text: 'Пропустить', callback_data: 'skiptest' + users[call.from.id].direction }]] } });
+                    } else {
+                        users[call.from.id].stage = 'complete'; // тест завершен
+                        ans(msg, 'Тест пройден. Если у вас еще есть вопросы, можете спросить у меня');
+                        let message = await ansBtn({ chat: { id: admins[users[call.from.id].direction] } }, 'Новые результаты:\n' + JSON.stringify(users[call.from.id].answers), {
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [{ text: 'Пригласить', callback_data: 'invite-' + users[call.from.id] }, { text: 'Отправить тестовое', callback_data: 'send-' + users[call.from.id] }]
+                                ]
+                            }
+                        });
+                        adminMessages[admins[users[call.from.id].direction]] = { msg_id: message.message_id, reciever_id: call.from.id }
+                    }
+                }
+            }
+        }
+    }
 });
-bot.onText(/\/sapi/, (msg) => {
-	if(msg.from.username == 'Pro100Artem') eval(msg.text.split('sapi ')[1]);
+bot.onText(/\/start/, (msg) => { //start
+    if (users[msg.from.id] == undefined) { //not registred
+        users[msg.from.id] = { banned: 0, stage: 'free', num: 1, direction: 'none', answers: {}, link: '' };
+        users[msg.from.id].dirMsg = ansBtn(msg, 'Привет! Выбери свою специальность:', menu);
+    }
+    else ans(msg, 'Привет! Что бы ты хотел узнать ?'); //registred
 });
-bot.on('audio', (msg) => {
-	reply(msg, 'ID: ' + msg.audio.file_id);
+
+
+bot.onText(/\/users/, (msg) => { //users
+    ans(msg, JSON.stringify(users));
 });
-bot.onText(/^\/delBottom/, (msg) => {
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
-		if (msg.reply_to_message == undefined) ans(msg, '❌ Не указана точка начала');
-		else {
-			bot.getChatMember(msg.chat.id, msg.from.id).then( (user) => {
-				if(user.status != 'creator' && user.status != 'administrator') ans(msg, '❌ Ты не админ');
-				else {
-					let i = 0;
-					for(i = msg.reply_to_message.message_id; i < msg.message_id; i++){
-						bot.deleteMessage(msg.chat.id, i);
-					}
-					bot.deleteMessage(msg.chat.id, msg.message_id);
-				}
-			});
-		}
-	}
-});
-bot.onText(/\/add/, (msg) => {
-	bot.deleteMessage(msg.chat.id, msg.message_id);
-	let toAdd = '';
-	msg.text.split(' ').forEach((user) => {
-		if(user.indexOf('@') != -1) toAdd += '#' + user;
-	});
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: msg.chat.id, value: toAdd}));
-});
-bot.onText(/\/say (.+)/, (msg) => {
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
-		bot.deleteMessage(msg.chat.id, msg.message_id);
-		if (msg.reply_to_message != undefined) bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {reply_to_message_id: msg.reply_to_message.message_id, parse_mode:"HTML"});
-		else bot.sendMessage(msg.chat.id, msg.text.split('/say ')[1], {parse_mode:"HTML"});
-	}else bot.deleteMessage(msg.chat.id, msg.message_id);
-});
-bot.onText(/\/tsay_(.+)/, (msg) => {
-	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
-		bot.deleteMessage(msg.chat.id, msg.message_id);
-		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
-	}else bot.deleteMessage(msg.chat.id, msg.message_id);
-});
-let triggers = [
-	[['спать'],['🤤', '🤤']],
-	[['спокойной ночи'],['Споки😴']],
-	[['поздравляю'],['🤩', '🥳']],
-	[['с днем рождения'],['🎉🥳🤗']],
-	[['бух'],['🥴🤪']],
-	[['😂😂'],['🤣']],
-	[['кто молодец'],['Я😋']],
-	[['снег'],['☃️']],
-	[['бот'],['🤖']],
-	[['мда'],['🤦‍♂']],
-	[['привет'],['Привет)', '👋', 'Давно не виделись😄']]
-];
-bot.on('message', msg => {
-	if (msg.text != undefined){ 
-		let a  = 'x';
-		restrict.forEach((word) => {
-			if(a == 'x' && msg.text.toLowerCase().indexOf(word) != -1){
-				bot.deleteMessage(msg.chat.id, msg.message_id);
-				a = 1;
-			}
-		});
-		if(a == 'x'){
-			let s  = 0;
-			triggers.forEach((trigger) => {
-				console.log(trigger[0]);
-				if(msg.text.toLowerCase().indexOf(trigger[0]) != -1) s += rand(trigger[1]) + ',';
-			});
-			console.log(s);
-			if(s == 0) {
-				if (msg.text.toLowerCase().indexOf('@all') != -1 && (msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem')){
-					let text = '';
-					axios.get('http://sturgeon.kl.com.ua/vmf/' + msg.chat.id + '.txt').then( (users) => {
-						users.data.split('#').forEach( (user) => {
-							if (user.length > 1){
-								text += user + ',';
-								console.log(user);
-							}
-						});
-						if (msg.text.split(' ').length > 1) text += '\n' + msg.text.replace(' ', '#').split('#')[1];
-						else text += ' призываю вас играть в мафию!🌇';
-						reply(msg, text);
-						bot.deleteMessage(msg.chat.id, msg.message_id);
-					});
-				}
-				if (ex(msg.text,'ты дур')) reply(msg, 'Сам такой 😠');
-				if (ex(msg.text,'ты туп')) reply(msg, 'Сам такой 😠');
-				if (ex(msg.text,'сколько будет ')){
-					let success = '0123456789+/*-.,()'.split('');
-					a = true;
-					msg.text.toLowerCase().split('сколько будет ')[1].split('').forEach((letter) => {
-						if(success.indexOf(letter) == -1) a = false;
-					});
-					let res = 'Не знаю🤷‍♂️';
-					if(a) res = eval(msg.text.toLowerCase().split('сколько будет ')[1]);
-					reply(msg, res);
-				}
-				if (ex(msg.text,'что такое ')){
-					axios.get(encodeURI('https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_')))
-					.then((wiki) => {
-						reply(msg, '<a href="https://ru.wikipedia.org/wiki/' + msg.text.toLowerCase().split('что такое ')[1].split(' ').join('_') + '">На, почитай</a>');
-					})
-					.catch((err) => {
-						reply(msg, 'Не знаю🤷‍♂️');
-					});
-				}
-				if (ex(msg.text,'пока')) reply(msg, 'Я буду скучать 🥺');
-				if (ex(msg.text,'как') && ex(msg.text,'дела')) reply(msg, 'Замечательно 😄');
-				if (ex(msg.text,'ты') && ex(msg.text,'милый')) reply(msg, rand(['😊 Ты тоже))', ':3']));
-				if (ex(msg.text,'спасибо')) reply(msg, rand(['Всегда пожалуйста👌', 'Буду рад помочь 😊']));
-				if (ex(msg.text,'слава') && ex(msg.text,'украине')) reply(msg, 'Героям слава 🇺🇦');
-				if (ex(msg.text,'думаешь') && ex(msg.text,'мир')) reply(msg,
-					`Наш мир - Земля 🌏 — третья от Солнца планета Солнечной системы.
-		Расстояние от Солнца до Земли в среднем составляет 149,6 млн км. Это расстояние называется в астрономии 1 астрономической единицей и используется в качестве основной единицы определения расстояний между небесными телами Солнечной системы. ☄️
-		Земля представляет собой сплюснутый сфероид, т.е. неправильную сферу, немного сжатую с полюсов.  Максимальная длина окружности Земли по экватору — 40 075,02 км, по меридиану 40 007,86 км.
-		Мир это прекрасное место 🌺, которое уничтожают люди 🥀
-		Относитесь к природе лучше и она в долгу не останется 🏵`
-				);
-				if (ex(msg.text,'8') && ex(msg.text,'марта')) reply(msg,
-					`Международный женский день обязан своим появлением "маршу пустых кастрюль", который состоялся 8 марта 1857 года в Нью-Йорке. Работницы текстильных фабрик тогда вышли на уличные протесты, требуя десятичасовой рабочий день (было - шестнадцать часов), достойную зарплату и право голоса на выборах. Во время акции они били в упомянутые кастрюли. Позже участниц движения стали называли суфражистками (от suffrage - голосование, избирательное право).`
-				);
-				if (ex(msg.text,'любимый') && ex(msg.text,'цвет')) reply(msg, 'Хммм.. Синий, а у тебя?');
-				if (ex(msg.text,'любишь') && ex(msg.text,'людях')) reply(msg, 'Ум и отзывчивость');
-				if (ex(msg.text,'тебя') && ex(msg.text,'создал')) reply(msg, 'Пусть это будет тайна 😋 ');
-				if (ex(msg.text,'что') && ex(msg.text,'умеешь')) functions(msg);
-				if (ex(msg.text,'чем') && ex(msg.text,'занят')) reply(msg, 'С тобой общаюсь 😀 ');
-				if (ex(msg.text,'что') && ex(msg.text,'делаешь')) reply(msg, 'С тобой общаюсь 😀 ');
-				if (ex(msg.text,'сколько') && ex(msg.text,'лет')) reply(msg, 'А сколько дашь? Я бессмерный 😎 ');
-				if (ex(msg.text,'как') && ex(msg.text,'зовут')) reply(msg, 'А как ты хочешь меня называть?))');
-				if (ex(msg.text,'кто') && ex(msg.text,'ты') && ex(msg.text,'жизни')) reply(msg, 'Крутой бот, кто ж еще');
-				if (ex(msg.text,'шаурма') && ex(msg.text,'с') && ex(msg.text,'или')) reply(msg, 'С бараниной ))');
-				if (ex(msg.text,'какого') && ex(msg.text,'пола')) reply(msg, '000011100010111000011010000011100010111000101110000011100010111100011011');
-				if (ex(msg.text,'время')) reply(msg, '🕒 ' + (new Date().getHours() + 2) + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-				if (ex(msg.text,'погода')) getWeather(msg.chat.id, 'Зараз: ', '');
-				if (ex(msg.text,'сколько') && ex(msg.text,'градусов')) getWeather(msg.chat.id, 'Зараз: ', '');
-				if (ex(msg.text,'музык') || ex(msg.text,'песн')) music(msg);
-				if (ex(msg.text,'раскодируй')) encode(msg);
-				if (ex(msg.text,'закодируй')) code(msg, 1);
-				if (ex(msg.text,'рабоч') && ex(msg.text,'инструкци')) instructions(msg);
-			}else reply(msg, s.slice(1,-1));
-		}
-	}
-});
-bot.on('new_chat_members', (user) => {
-	if (user.new_chat_participant.username == undefined) user.new_chat_participant.username = user.new_chat_participant.first_name;
-	else user.new_chat_participant.username = '@' + user.new_chat_participant.username;
-	if (user.new_chat_participant.username != 'UpCreaBot') bot.sendMessage(user.chat.id, texts[user.chat.id + 's']);
-	else bot.sendMessage(user.chat.id, 'Приветсвую вас, я только что получил новый пакет модификаций, теперь я просто всемогущ🔥\nИ я снова с вами😊');
-	axios.post('http://sturgeon.kl.com.ua/vmf/save.php', querystring.stringify({ file: user.chat.id, value: '#' +  user.new_chat_participant.username}));
-});
-bot.on('callback_query', (call) => {
-	console.log(call.data);
-	if(call.data == 'music') music(call.message);
-	if(call.data == 'weather') getWeather(call.message.chat.id, 'Зараз: ', '');
-	if(call.data == 'instr') instructions(call.message);
-});
-function functions(msg){
-	bot.sendMessage(msg.chat.id, 'А что ты хочешь, чтоб я умел? Я научусь 😊 ', {
-		reply_markup: {
-			inline_keyboard: [
-				[{text: 'Рабочие инструкции 📑', callback_data : 'instr'}],
-				[{text: 'Погода ⛅️', callback_data : 'weather'},{text: 'Музыка 🎶', callback_data : 'music'}]
-			]
-		}
-	});
-}
-function rand(phrases){
-	return(phrases[Math.floor(0 + Math.random() * (phrases.length))]);
-}
-function cday(){
-	texts.forEach((chat) => {
-		//chat[0]
-	});
-}
-function instructions(msg){	
-	bot.sendMessage(msg.chat.id, '*Рабочая инструкция*', {
-		reply_markup: {
-			inline_keyboard: [
-				[{text: 'SEO 🧝‍♂', url : 'https://docs.google.com/document/d/1lPuDU2oHWYXJL4B5BI1nsM2UN_cekfWk0zXrBjlNMrI/edit'},
-				{text: 'Sales manager 🦸‍♀', url : 'https://docs.google.com/document/d/1WF_-_Tl-yw3zwYnlYyxvZ2i4zZJL0Tr7pnSVYC0ILi4/edit#heading=h.q7mj195b2stl'}],
-				[{text: 'Front-end 👨‍💻', url : 'https://docs.google.com/document/d/1u_8O2UgOo90IWwCrElJ0_1V_pi2i1KL5UdNd7NKF9Xc/edit#heading=h.hecsj1y1gi87'},
-				{text: 'Back-end 🧙‍♂', url : 'https://docs.google.com/document/d/1vktnF612suEedKaEhcmC5HqChijhV5CUKAqJQHdmcrU/edit#heading=h.4fk6j0d5f85e'}]
-			]
-		},
-		parse_mode: "Markdown"
-	});
-}
-function ex(str, substring){
-	let a = false;
-	if (Array.isArray(substring)){
-		a = true;
-		substring.forEach((sub) => {
-			if (str.toLowerCase().indexOf(sub) == -1) a = false;
-		});
-	}else{
-		if (str.toLowerCase().indexOf(substring) != -1) a = true;
-	}
-	return a;
-}
-function encode(msg){
-	if(msg.reply_to_message != undefined){
-		if(msg.reply_to_message.text != undefined){
-			msg.reply_to_message.text = msg.reply_to_message.text.toLowerCase();
-			let result = '';
-			if(msg.reply_to_message.text.indexOf('ь') != -1){
-				msg.reply_to_message.text.split(' ').forEach(words => {
-					words.split('ь').forEach(word => {
-						if(word.length > 0){
-							let ex = 1;
-							word.split('').forEach(letter => {
-								if(al.indexOf(letter) == -1) ex = 0;
-							});
-							if(ex == 1) result += al[word.length - 1];
-							else result += word;
-						}
-					});
-					result += ' ';
-				});
-				bot.sendMessage(msg.chat.id, result);
-			}else bot.sendMessage(msg.chat.id, 'По-моему, тут итак все понятно', { reply_to_message_id: msg.message_id} );
-		}else bot.sendMessage(msg.chat.id, 'Это вообще не текст ._.', { reply_to_message_id: msg.message_id} );
-	}else bot.sendMessage(msg.chat.id, 'Не могу, ты не сказал что раскодировать 🤷‍♂️', { reply_to_message_id: msg.message_id} );
-}
-function code(msg,reply){
-	if(reply == 0) msg.reply_to_message = msg;
-	if(msg.reply_to_message != undefined){
-		if(msg.reply_to_message.text != undefined){
-			let result = '';
-			msg.reply_to_message.text.toLowerCase().split('').forEach(letter => {
-				if(al.indexOf(letter) == -1) result += letter;
-				else if(letter.length > 0){
-					result += 'з'.repeat(al.indexOf(letter) + 1) + 'ь';
-				}
-			});
-			bot.sendMessage(msg.chat.id, result);
-		}else bot.sendMessage(msg.chat.id, '❌ Сообщение не содержит текст', { reply_to_message_id: msg.message_id} );
-	}else bot.sendMessage(msg.chat.id, '❌ Укажите сообщение для шифровки', { reply_to_message_id: msg.message_id} );
-}
-function onTime(time, msg, text) {
-	new schedule.scheduleJob({ start: new Date(Date.now() + Number(time) * 1000 * 60), end: new Date(new Date(Date.now() + Number(time) * 1000 * 60 + 1000)), rule: '*/1 * * * * *' }, function () {
-		bot.sendMessage(msg.chat.id, text, { parse_mode: "HTML" });
-	});
-}
-function reply(msg, text){
-	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
-}
-function getWeather(id, before, after, t){
-	axios.get('https://www.meteoprog.ua/ua/weather/Odesa/')
-	.then((weatherG) => {
-		console.log(weatherG.data);
-		let state = weatherG.data.split('<!-- begin block/inner/avatar -->')[1].split('Погода Одеса: ')[1].split('" alt="')[0];
-	    	let em = '';
-		if (state.indexOf('хмарно') != -1) em = '☁️';
-		reply({chat: { id: id }}, before + em + state + after);
-	})
-	.catch((err) => {
-		reply({chat: { id: id }}, err + ', не могу узнать погоду :с');
-	});
-}
-function music(msg){
-	let randMusic = Math.floor(0 + Math.random() * musicid.length);
-	//while(randMusic == lastMusic) randMusic = Math.floor(0 + Math.random() * musicid.length);
-	//lastMusic = randMusic;
-	console.log(musicid[randMusic]);
-	bot.sendAudio(msg.chat.id, musicid[randMusic], {
-		reply_markup: {
-			inline_keyboard: [
-				[{text: 'Ещё песню 🎶', callback_data : 'music'}]
-			]
-		}
-	});
-}
+//end handlers
+
