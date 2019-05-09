@@ -338,7 +338,7 @@ function getWeather(id, before, after) {
 	    else if (wind_speed.in_range(20.8, 22.4))
 		    after = 'Шторм 🌪\n' + after;
 	    let clouds_percentage = weather.data.clouds.all;
-	    ans({chat: {id: id}}, 
+	    reply({chat: {id: id}}, 
 			`${before} ${icon} ${temperature}°C
 		${description}, швидкiсть вiтру ${wind_speed}м/с
 		Вологiсть: ${humidity_percentage}% 💧
