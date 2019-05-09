@@ -312,6 +312,17 @@ function onTime(time, msg, text) {
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
+let weather_info = {
+    '01': ['☀️', 'Ясно'],
+    '02': ['🌤', 'Невелика хмарність'],
+    '03': ['🌥', 'Переменчивая облачность'],
+    '04': ['☁️', 'Мінлива хмарність'],
+    '09': ['🌧', 'Злива'],
+    '10': ['🌦', 'Дощ'],
+    '11': ['⛈', 'Гроза'],
+    '13': ['🌨', 'Снiг'],
+    '50': ['🌫', 'Туман']
+}
 function getWeather(id, before, after) {
 	axios.get('https://api.openweathermap.org/data/2.5/weather?lat=46.430151&lon=30.697654&appid=ac4ab89a24a1822cc361aeb04f01a8a4').then((weather) => {
 	    console.log(weather.data);
