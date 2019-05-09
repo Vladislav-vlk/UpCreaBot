@@ -43,15 +43,15 @@ let texts = {
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
 	});
 }
 new schedule.scheduleJob('01 9 * * *', () => {
-	getWeather(-369468468, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
+	getWeather(-369468468, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
 });
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
@@ -215,9 +215,12 @@ bot.on('new_chat_members', (user) => {
 });
 bot.on('callback_query', (call) => {
 	console.log(call.data);
-	if(call.data == 'music') music(call.message);
-	if(call.data == 'weather') getWeather(call.message.chat.id, 'Зараз: ', '');
-	if(call.data == 'instr') instructions(call.message);
+	if(call.data == 'music')
+		music(call.message);
+	if(call.data == 'weather')
+		getWeather(call.message.chat.id, 'Зараз: ', '');
+	if(call.data == 'instr')
+		instructions(call.message);
 });
 function functions(msg){
 	bot.sendMessage(msg.chat.id, 'А что ты хочешь, чтоб я умел? Я научусь 😊 ', {
