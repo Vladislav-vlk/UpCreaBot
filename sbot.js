@@ -43,15 +43,15 @@ let texts = {
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
 	});
 }
 new schedule.scheduleJob('01 9 * * *', () => {
-	getWeather(-369468468, 'Доброе утро))\nСьогоднi ', '\nВсем хорошего настроения✨', 1);
+	getWeather(-369468468, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨', 1);
 });
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
@@ -309,18 +309,34 @@ function onTime(time, msg, text) {
 function reply(msg, text){
 	bot.sendMessage(msg.chat.id, text, {reply_to_message: msg.message_id, parse_mode:"HTML"});
 }
-function getWeather(id, before, after, t){
-	axios.get('https://www.meteoprog.ua/ua/weather/Odesa/')
-	.then((weatherG) => {
-		console.log(weatherG.data);
-		let state = weatherG.data.split('<!-- begin block/inner/avatar -->')[1].split('Погода Одеса: ')[1].split('" alt="')[0];
-	    	let em = '';
-		if (state.indexOf('хмарно') != -1) em = '☁️';
-		reply({chat: { id: id }}, before + em + state + after);
+function getWeather(id, before, after) {
+	axios.get('https://api.openweathermap.org/data/2.5/weather?lat=46.430151&lon=30.697654&appid=ac4ab89a24a1822cc361aeb04f01a8a4').then((weather) => {
+	    console.log(weather.data);
+	    let icon = weather_info[weather.data.weather[0].icon.substr(0, 2)][0];
+	    let description = weather_info[weather.data.weather[0].icon.substr(0, 2)][1];
+	    let temperature = Number(weather.data.main.temp) - 273.15;
+	    let humidity_percentage = weather.data.main.humidity;
+	    let wind_speed = Math.round(Number(weather.data.wind.speed) / 3.6);
+	    if (wind_speed.in_range(1.6, 3.3))
+		    after = 'Легкий вiтерець\n' + after;
+	    else if (wind_speed.in_range(10.6, 13.8))
+		    after = 'Сильний вiтер 💨\n' + after;
+	    else if (wind_speed.in_range(20.8, 22.4))
+		    after = 'Шторм 🌪\n' + after;
+	    let clouds_percentage = weather.data.clouds.all;
+	    ans({chat: {id: id}}, 
+			`${before} ${icon} ${temperature}°C
+		${description}, швидкiсть вiтру ${wind_speed}м/с
+		Вологiсть: ${humidity_percentage}% 💧
+		Хмари: ${clouds_percentage}% ☁️
+		${after}`
+	   )
 	})
-	.catch((err) => {
-		reply({chat: { id: id }}, err + ', не могу узнать погоду :с');
-	});
+}
+Number.prototype.in_range = function(min, max){
+	if(this >= min && this <= max)
+		return true
+	return false
 }
 function music(msg){
 	let randMusic = Math.floor(0 + Math.random() * musicid.length);
