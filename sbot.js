@@ -343,8 +343,8 @@ function getWeather(id, before, after) {
 	    reply({chat: {id: id}}, 
 			`${before} ${icon} ${temperature}°C
 ${description}, ${wind_speed}
-Вологiсть: ${humidity_percentage}% 💧
-Хмари: ${clouds_percentage}% ☁️
+Вологiсть: ${humidity_percentage}%
+Хмари: ${clouds_percentage}%
 ${after}`
 	   )
 	})
