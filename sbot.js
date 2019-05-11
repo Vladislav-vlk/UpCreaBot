@@ -331,19 +331,21 @@ function getWeather(id, before, after) {
 	    let temperature = Number(weather.data.main.temp) - 273.15;
 	    let humidity_percentage = weather.data.main.humidity;
 	    let wind_speed = Math.round(Number(weather.data.wind.speed) / 3.6);
-	    if (wind_speed.in_range(1.6, 3.3))
-		    after = 'Легкий вiтерець\n' + after;
-	    else if (wind_speed.in_range(10.6, 13.8))
-		    after = 'Сильний вiтер 💨\n' + after;
-	    else if (wind_speed.in_range(20.8, 22.4))
-		    after = 'Шторм 🌪\n' + after;
+	    if (wind_speed.in_range(1.6, 10.5))
+		    wind_speed = 'легкий вiтерець\n' + after;
+	    else if (wind_speed.in_range(10.6, 20.8))
+		    wind_speed = 'сильний вiтер 💨\n' + after;
+	    else if (wind_speed.in_range(20.8, 500))
+		    wind_speed = 'шторм 🌪\n' + after;
+	    else 
+		    wind_speed = 'вiтру нема'
 	    let clouds_percentage = weather.data.clouds.all;
 	    reply({chat: {id: id}}, 
 			`${before} ${icon} ${temperature}°C
-		${description}, швидкiсть вiтру ${wind_speed}м/с
-		Вологiсть: ${humidity_percentage}% 💧
-		Хмари: ${clouds_percentage}% ☁️
-		${after}`
+${description}, ${wind_speed}
+Вологiсть: ${humidity_percentage}% 💧
+Хмари: ${clouds_percentage}% ☁️
+${after}`
 	   )
 	})
 }
