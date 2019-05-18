@@ -43,15 +43,15 @@ let texts = {
 let weather = '';
 if (new Date().getDay() == 6 || new Date().getDay == 0 || weDates.indexOf(new Date().getDate() + '.' + (new Date().getMonth() + 1)) != -1) {
 	new schedule.scheduleJob('00 7 * * *', () => {
-		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсім чудового настрою😊');
 	});
 }else{
 	new schedule.scheduleJob('00 6 * * *', () => {
-		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
+		getWeather(-1001227448699, 'Доброго ранку))\nЗараз: ', '\nВсім чудового настрою😊');
 	});
 }
-new schedule.scheduleJob('01 9 * * *', () => {
-	getWeather(-369468468, 'Доброго ранку))\nЗараз: ', '\nВсiм гарного настрою✨');
+new schedule.scheduleJob('00 4 * * *', () => {
+	getWeather(-369468468, 'Доброго ранку))\nЗараз: ', '\nВсім чудового настрою😊');
 });
 bot.onText(/^\/test/, (msg) => {
 	bot.sendSticker(msg.chat.id, 'CAADAgADOAADyIsGAAE7re09I3hMQwI');
@@ -101,7 +101,8 @@ bot.onText(/\/tsay_(.+)/, (msg) => {
 	if(msg.from.username == 'wladislaw353' || msg.from.username == 'Pro100Artem') {
 		bot.deleteMessage(msg.chat.id, msg.message_id);
 		onTime(Number(msg.text.split('_')[1]), msg, msg.text.split('_')[2]);
-	}else bot.deleteMessage(msg.chat.id, msg.message_id);
+	} else
+		bot.deleteMessage(msg.chat.id, msg.message_id);
 });
 let triggers = [
 	[['спать'],['🤤', '🤤']],
@@ -332,11 +333,11 @@ function getWeather(id, before, after) {
 	    let humidity_percentage = weather.data.main.humidity;
 	    let wind_speed = Math.round(Number(weather.data.wind.speed) / 3.6);
 	    if (wind_speed.in_range(1.6, 10.5))
-		    wind_speed = 'легкий вiтерець\n' + after;
+		    wind_speed = 'легкий вiтерець\n';
 	    else if (wind_speed.in_range(10.6, 20.8))
-		    wind_speed = 'сильний вiтер 💨\n' + after;
+		    wind_speed = 'сильний вiтер 💨\n';
 	    else if (wind_speed.in_range(20.8, 500))
-		    wind_speed = 'шторм 🌪\n' + after;
+		    wind_speed = 'шторм 🌪\n' ;
 	    else 
 		    wind_speed = 'вiтру нема'
 	    let clouds_percentage = weather.data.clouds.all;
